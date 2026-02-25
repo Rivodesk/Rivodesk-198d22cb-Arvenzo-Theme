@@ -33,7 +33,7 @@ function normalizeJSONProduct(p: ShopifyJSONProduct): Product {
       compareAtPrice: v.compare_at_price
         ? { amount: v.compare_at_price, currencyCode: 'EUR' }
         : null,
-      availableForSale: v.available,
+      availableForSale: v.available !== false, // undefined = available (public JSON API doesn't expose this)
       selectedOptions: p.options.map((o, i) => ({
         name: o.name,
         value: (v as unknown as Record<string, string>)[`option${i + 1}`] ?? '',

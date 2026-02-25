@@ -49,7 +49,7 @@ export default function BrandStory() {
           {[
             { n: '7', label: 'Unieke collecties', sub: 'Elk met eigen identiteit' },
             { n: '28', label: 'Producten', sub: 'Hoodies, shirts, mugs & meer' },
-            { n: '100%', label: 'Gedrukt in 🇩🇪', sub: 'Premium Duits vakmanschap' },
+            { n: '100%', label: 'Gedrukt in 🌍', sub: 'Premium Europees vakmanschap' },
             { n: '15%', label: 'Korting', sub: 'Op het volledige assortiment' },
           ].map((s) => (
             <div key={s.label} className="bg-arvenzo-cream-dark rounded-2xl p-6">

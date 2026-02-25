@@ -11,7 +11,7 @@ const NAV = [
   { href: '/products?type=Hoodies', label: 'Hoodies' },
   { href: '/products?type=Sweatshirts', label: 'Sweatshirts' },
   { href: '/products?type=Unisex-Shirts', label: 'Shirts' },
-  { href: '/products?type=Trinkgefäße', label: 'Mugs' },
+  { href: '/products?type=Trinkgef%C3%A4%C3%9Fe', label: 'Mugs' },
 ];
 
 export default function Header() {
@@ -20,28 +20,38 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
+    const fn = () => setScrolled(window.scrollY > 50);
+    fn(); // run on mount
     window.addEventListener('scroll', fn, { passive: true });
     return () => window.removeEventListener('scroll', fn);
   }, []);
 
+  // When at top: white text (hero is dark). When scrolled: dark text on glass.
+  const textColor = scrolled ? 'text-arvenzo-ink' : 'text-arvenzo-cream';
+  const logoHover = scrolled ? 'hover:text-arvenzo-brown' : 'hover:text-arvenzo-orange';
+
   return (
     <>
       {/* Announcement bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-arvenzo-brown text-arvenzo-cream text-[11px] font-sans tracking-widest uppercase text-center py-2.5">
-        Gratis verzending v.a. €50 &nbsp;·&nbsp; Limited edition &nbsp;·&nbsp; Gedrukt in Duitsland
+      <div className="fixed top-0 left-0 right-0 z-50 bg-arvenzo-brown text-arvenzo-cream text-[11px] font-sans tracking-widest uppercase text-center py-2.5 px-4">
+        Gratis verzending v.a. €50 &nbsp;·&nbsp; Limited edition &nbsp;·&nbsp; Gedrukt in Europa
       </div>
 
       {/* Main header */}
       <header
         className={clsx(
           'fixed top-[36px] left-0 right-0 z-40 transition-all duration-500',
-          scrolled ? 'glass shadow-[0_1px_0_rgba(93,43,9,0.08)]' : 'bg-transparent'
+          scrolled
+            ? 'glass shadow-[0_1px_0_rgba(93,43,9,0.08)]'
+            : 'bg-gradient-to-b from-black/30 to-transparent'
         )}
       >
         <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-[60px]">
           {/* Logo */}
-          <Link href="/" className="font-heading font-black text-xl tracking-[0.15em] text-arvenzo-ink hover:text-arvenzo-brown transition-colors">
+          <Link
+            href="/"
+            className={clsx('font-heading font-black text-xl tracking-[0.15em] transition-colors', textColor, logoHover)}
+          >
             ARVENZO
           </Link>
 
@@ -51,7 +61,12 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-[13px] font-sans font-medium text-arvenzo-ink/70 hover:text-arvenzo-brown transition-colors tracking-wide"
+                className={clsx(
+                  'text-[13px] font-sans font-medium transition-colors tracking-wide',
+                  scrolled
+                    ? 'text-arvenzo-ink/70 hover:text-arvenzo-brown'
+                    : 'text-arvenzo-cream/80 hover:text-arvenzo-cream'
+                )}
               >
                 {item.label}
               </Link>
@@ -63,11 +78,11 @@ export default function Header() {
             <button
               onClick={openCart}
               aria-label="Winkelwagen"
-              className="relative p-2.5 text-arvenzo-ink hover:text-arvenzo-brown transition-colors"
+              className={clsx('relative p-2.5 transition-colors', textColor)}
             >
               <ShoppingBag size={21} strokeWidth={1.5} />
               {totalQuantity > 0 && (
-                <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-arvenzo-brown text-arvenzo-cream text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+                <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-arvenzo-orange text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
                   {totalQuantity}
                 </span>
               )}
@@ -75,7 +90,7 @@ export default function Header() {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
-              className="lg:hidden p-2.5 text-arvenzo-ink"
+              className={clsx('lg:hidden p-2.5 transition-colors', textColor)}
             >
               {mobileOpen ? <X size={21} strokeWidth={1.5} /> : <Menu size={21} strokeWidth={1.5} />}
             </button>
@@ -94,14 +109,14 @@ export default function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className="font-heading font-bold text-4xl text-arvenzo-ink hover:text-arvenzo-brown transition-colors py-2"
+              className="font-heading font-bold text-4xl text-arvenzo-ink hover:text-arvenzo-brown transition-colors py-2 border-b border-arvenzo-cream-dark last:border-0"
             >
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="mt-auto px-8 pb-12 text-sm text-arvenzo-muted font-sans">
-          Belgisch merk · Gedrukt in Duitsland
+          Belgisch merk · Gedrukt in Europa
         </div>
       </div>
     </>

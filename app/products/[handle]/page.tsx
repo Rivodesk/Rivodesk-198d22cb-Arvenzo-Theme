@@ -110,8 +110,8 @@ export default async function ProductPage({ params }: PageProps) {
             <div className="grid grid-cols-3 gap-3 mb-6">
               {[
                 { e: '🚚', t: 'Gratis v.a. €50' },
-                { e: '↩️', t: '30 dagen retour' },
-                { e: '🇩🇪', t: 'Gedrukt in DE' },
+                { e: '↩️', t: '14 dagen retour' },
+                { e: '🌍', t: 'Gedrukt in Europa' },
               ].map(i => (
                 <div key={i.t} className="flex flex-col items-center text-center p-3 bg-arvenzo-cream rounded-xl gap-1.5">
                   <span className="text-xl">{i.e}</span>
@@ -140,7 +140,7 @@ export default async function ProductPage({ params }: PageProps) {
               <div className="pb-4 text-sm text-arvenzo-muted font-sans leading-relaxed space-y-2">
                 <p>• Gratis standaard verzending bij bestellingen vanaf €50</p>
                 <p>• Levertijd: 3-7 werkdagen binnen België en Nederland</p>
-                <p>• Retourneren binnen 30 dagen na ontvangst</p>
+                <p>• Retourneren binnen 14 dagen na ontvangst</p>
               </div>
             </details>
           </div>

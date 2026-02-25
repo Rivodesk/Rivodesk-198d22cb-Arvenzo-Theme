@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <div className="font-heading font-black text-2xl tracking-[0.12em]">ARVENZO</div>
             <p className="mt-3 text-arvenzo-cream/40 text-sm font-sans leading-relaxed">
-              Avontuur en rust in elk ontwerp. Belgisch merk, gedrukt in Duitsland.
+              Avontuur en rust in elk ontwerp. Belgisch merk, gedrukt in Europa.
             </p>
             <div className="flex gap-3 mt-5">
               {['Instagram', 'Facebook', 'TikTok'].map(s => (

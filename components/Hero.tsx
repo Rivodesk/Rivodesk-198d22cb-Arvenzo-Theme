@@ -31,7 +31,7 @@ export default function Hero() {
         </h1>
 
         <p className="mt-6 text-arvenzo-cream/60 font-sans text-lg sm:text-xl max-w-md leading-relaxed">
-          Premium streetwear voor wie de bergen voelt. Limited edition, gedrukt in Duitsland.
+          Premium streetwear voor wie de bergen voelt. Limited edition, gedrukt in Europa.
         </p>
 
         <div className="flex flex-wrap gap-3 mt-10">

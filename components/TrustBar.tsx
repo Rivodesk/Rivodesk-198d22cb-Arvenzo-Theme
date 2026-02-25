@@ -1,6 +1,6 @@
 const ITEMS = [
   { icon: '🚚', title: 'Gratis verzending', desc: 'Vanaf €50 bestelling' },
-  { icon: '↩️', title: '30 dagen retour', desc: 'Moeiteloos retourneren' },
+  { icon: '↩️', title: '14 dagen retour', desc: 'Moeiteloos retourneren' },
   { icon: '🔒', title: 'Veilig betalen', desc: 'Visa · Mastercard · Bancontact' },
   { icon: '⭐', title: '4.9 / 5 sterren', desc: '500+ tevreden klanten' },
 ];

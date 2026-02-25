@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s | Arvenzo',
   },
   description:
-    'Premium limited edition streetwear met berglandschap designs. Hoodies, sweatshirts, shirts & mugs. Belgisch merk, gedrukt in Duitsland.',
+    'Premium limited edition streetwear met berglandschap designs. Hoodies, sweatshirts, shirts & mugs. Belgisch merk, gedrukt in Europa.',
   keywords: ['arvenzo', 'hoodie', 'sweatshirt', 'limited edition', 'mountain', 'crescent peak'],
   openGraph: {
     title: 'Arvenzo — Draag het avontuur.',

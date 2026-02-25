@@ -3,7 +3,7 @@ import Hero from '@/components/Hero';
 import Marquee from '@/components/Marquee';
 import TrustBar from '@/components/TrustBar';
 import FeaturedProducts from '@/components/FeaturedProducts';
-import CollectionSpotlight from '@/components/CollectionSpotlight';
+import LifestyleSection from '@/components/LifestyleSection';
 import BrandStory from '@/components/BrandStory';
 import Reviews from '@/components/Reviews';
 import Newsletter from '@/components/Newsletter';
@@ -19,7 +19,7 @@ export default async function HomePage() {
       <Marquee />
       <TrustBar />
       <FeaturedProducts products={products} />
-      <CollectionSpotlight products={products} />
+      <LifestyleSection products={products} />
       <BrandStory />
       <Reviews />
       <Newsletter />
