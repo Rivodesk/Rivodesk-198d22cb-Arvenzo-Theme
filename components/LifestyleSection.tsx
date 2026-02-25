@@ -18,7 +18,7 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
           src="/images/man-sweatshirt.jpg"
           alt="Man in Arvenzo sweatshirt"
           fill
-          className="object-cover object-top opacity-75"
+          className="object-cover object-[50%_30%] opacity-75"
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-arvenzo-dark/85 via-arvenzo-dark/40 to-transparent" />
@@ -108,7 +108,7 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
             src="/images/man-shirt.jpg"
             alt="Man in Arvenzo shirt in het bos"
             fill
-            className="object-cover object-left"
+            className="object-cover object-[left_15%]"
             sizes="50vw"
           />
         </div>
