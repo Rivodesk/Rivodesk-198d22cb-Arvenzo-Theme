@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --arvenzo-brown: #5D2B09;
+    --arvenzo-cream: #F7F1ED;
+    --arvenzo-orange: #D78650;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-arvenzo-cream text-arvenzo-dark font-sans;
+  }
+
+  ::selection {
+    @apply bg-arvenzo-orange/30 text-arvenzo-dark;
+  }
+}
+
+@layer utilities {
+  .bg-arvenzo-light {
+    background-color: #FAF7F4;
+  }
+}
+
+/* Smooth scrollbar */
+@media (hover: hover) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-arvenzo-cream-dark rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-arvenzo-muted;
+  }
+}
