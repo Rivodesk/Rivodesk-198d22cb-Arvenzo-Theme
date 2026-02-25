@@ -108,7 +108,7 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
             src="/images/man-shirt.jpg"
             alt="Man in Arvenzo shirt in het bos"
             fill
-            className="object-cover object-left"
+            className="object-cover object-[left_15%]"
             sizes="50vw"
           />
         </div>
