@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, Menu, X } from 'lucide-react';
+import { ShoppingBag, Menu, X, User } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import clsx from 'clsx';
 
@@ -75,6 +75,15 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-1">
+            <a
+              href="https://shopify.com/5304a7ff-a0eb-495b-8cc5-b88c0ac90c6d/account"
+              aria-label="Mijn account"
+              className={clsx('p-2.5 transition-colors', textColor,
+                effectivelyScrolled ? 'hover:text-arvenzo-brown' : 'hover:text-arvenzo-orange'
+              )}
+            >
+              <User size={21} strokeWidth={1.5} />
+            </a>
             <button onClick={openCart} aria-label="Winkelwagen"
               className={clsx('relative p-2.5 transition-colors', textColor)}
             >
