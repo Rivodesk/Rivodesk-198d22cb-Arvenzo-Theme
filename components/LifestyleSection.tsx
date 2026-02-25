@@ -14,12 +14,11 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
 
       {/* Row 1: Full-bleed dark — man in sweatshirt at camping */}
       <div className="relative overflow-hidden min-h-[580px] flex items-center bg-arvenzo-dark">
-        {/* object-contain = full portrait visible, dark bg fills sides */}
         <Image
           src="/images/man-sweatshirt.jpg"
           alt="Man in Arvenzo sweatshirt"
           fill
-          className="object-contain object-[50%_20%] opacity-75"
+          className="object-cover object-top opacity-75"
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-arvenzo-dark/85 via-arvenzo-dark/40 to-transparent" />
@@ -50,12 +49,12 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
       {/* Row 2: Two columns — woman hoodie + woman mug */}
       <div className="grid grid-cols-1 md:grid-cols-2">
         {/* Woman with hoodie */}
-        <div className="relative overflow-hidden min-h-[500px] bg-arvenzo-dark group">
+        <div className="relative overflow-hidden min-h-[500px] group">
           <Image
             src="/images/woman-hoodie.jpg"
             alt="Vrouw in Arvenzo hoodie"
             fill
-            className="object-contain object-top transition-transform duration-700 group-hover:scale-105"
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-arvenzo-dark/75 via-arvenzo-dark/10 to-transparent" />
@@ -76,12 +75,12 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
         </div>
 
         {/* Woman with mug */}
-        <div className="relative overflow-hidden min-h-[500px] bg-arvenzo-dark group">
+        <div className="relative overflow-hidden min-h-[500px] group">
           <Image
             src="/images/woman-mug.jpg"
             alt="Vrouw met Arvenzo mug"
             fill
-            className="object-contain object-top transition-transform duration-700 group-hover:scale-105"
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-arvenzo-dark/75 via-arvenzo-dark/10 to-transparent" />
@@ -109,7 +108,7 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
             src="/images/man-shirt.jpg"
             alt="Man in Arvenzo shirt in het bos"
             fill
-            className="object-cover object-[left_15%]"
+            className="object-cover object-left"
             sizes="50vw"
           />
         </div>
