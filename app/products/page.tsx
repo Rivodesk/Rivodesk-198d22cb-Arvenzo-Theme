@@ -19,8 +19,8 @@ export default async function ProductsPage({ searchParams }: PageProps) {
   let allProducts: Product[] = MOCK_PRODUCTS;
 
   if (
-    process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN &&
-    process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    process.env.SHOPIFY_STORE_DOMAIN &&
+    process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
   ) {
     try {
       allProducts = await getAllProducts(50);

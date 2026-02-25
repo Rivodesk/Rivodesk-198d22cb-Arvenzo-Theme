@@ -12,8 +12,8 @@ interface PageProps {
 
 async function getProduct(handle: string): Promise<Product | null> {
   if (
-    process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN &&
-    process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    process.env.SHOPIFY_STORE_DOMAIN &&
+    process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
   ) {
     try {
       return await getProductByHandle(handle);
@@ -27,8 +27,8 @@ async function getProduct(handle: string): Promise<Product | null> {
 export async function generateStaticParams() {
   let products: Product[] = MOCK_PRODUCTS;
   if (
-    process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN &&
-    process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    process.env.SHOPIFY_STORE_DOMAIN &&
+    process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
   ) {
     try {
       products = await getAllProducts(50);
