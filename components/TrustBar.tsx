@@ -3,12 +3,13 @@ const ITEMS = [
   { icon: '↩️', title: '14 dagen retour', desc: 'Moeiteloos retourneren' },
   { icon: '🔒', title: 'Veilig betalen', desc: 'Visa · Mastercard · Bancontact' },
   { icon: '⭐', title: '4.9 / 5 sterren', desc: '500+ tevreden klanten' },
+  { icon: '🌱', title: '1 boom & 1 kg CO₂', desc: 'Per besteld item gedoneerd' },
 ];
 
 export default function TrustBar() {
   return (
     <div className="bg-arvenzo-cream-dark border-y border-arvenzo-cream-dark/60">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 grid grid-cols-2 lg:grid-cols-5 gap-6">
         {ITEMS.map((item) => (
           <div key={item.title} className="flex items-center gap-3">
             <span className="text-xl shrink-0">{item.icon}</span>
