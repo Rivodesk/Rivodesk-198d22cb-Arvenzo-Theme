@@ -60,47 +60,93 @@ function IconMaestro() {
   );
 }
 
-function IconApplePay() {
+function IconAmex() {
   return (
-    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="Apple Pay">
-      <rect width="46" height="30" rx="4" fill="#000"/>
-      {/* Simplified Apple logo path */}
-      <path d="M17.2 10.1c.7-.9 1.1-2 1-3.1-1 .1-2.2.7-2.9 1.5-.7.8-1.2 1.8-1.1 2.9 1.1.1 2.3-.5 3-1.3z" fill="white"/>
-      <path d="M18.2 11.6c-1.7-.1-3.1 1-3.9 1-.8 0-2-.9-3.3-.9-1.7.1-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.3 1.9 2.7 3.3 2.7 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4-.1 2.3-1.3 3.2-2.6 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1 0-2.5 2.1-3.8 2.2-3.9-1.1-1.5-2.9-1.6-3.9-1.1z" fill="white"/>
-      <text x="34" y="19" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="500" fontSize="8" fill="white">Pay</text>
+    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="American Express">
+      <rect width="46" height="30" rx="4" fill="#2E77BC"/>
+      <text x="23" y="19" textAnchor="middle" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontSize="9" fill="white" letterSpacing="1">AMEX</text>
     </svg>
   );
 }
 
-function IconGooglePay() {
+function IconPayPal() {
   return (
-    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="Google Pay">
+    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="PayPal">
       <rect width="46" height="30" rx="4" fill="white"/>
       <rect x=".5" y=".5" width="45" height="29" rx="3.5" stroke="#E0E0E0" strokeWidth=".7"/>
-      {/* G in Google colors */}
-      <path d="M18 11.5h-4.5v2.1h2.6c-.3 1.5-1.5 2.4-2.6 2.4-1.6 0-2.9-1.3-2.9-2.9s1.3-2.9 2.9-2.9c.7 0 1.3.3 1.8.7l1.5-1.5C15.7 8.5 14.6 8 13.4 8 10.5 8 8 10.5 8 13.5s2.5 5.5 5.4 5.5c3.1 0 5.1-2.2 5.1-5.4 0-.4 0-.7-.1-1.1H18z" fill="#4285F4"/>
-      <text x="30" y="19" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="500" fontSize="8.5" fill="#444">Pay</text>
+      <text x="10" y="20" fontFamily="Arial Black,sans-serif" fontWeight="900" fontStyle="italic" fontSize="13" fill="#003087">P</text>
+      <text x="17" y="20" fontFamily="Arial Black,sans-serif" fontWeight="900" fontStyle="italic" fontSize="13" fill="#009CDE">P</text>
+      <text x="23" y="19.5" fontFamily="Arial,sans-serif" fontWeight="600" fontSize="8.5" fill="#003087">ayPal</text>
     </svg>
   );
 }
 
-function IconShopPay() {
+function IconUnionPay() {
   return (
-    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="Shop Pay">
-      <rect width="46" height="30" rx="4" fill="#5C6AC4"/>
-      <text x="23" y="19" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="7.5" fill="white" letterSpacing=".3">Shop Pay</text>
+    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="UnionPay">
+      <rect width="46" height="30" rx="4" fill="#CC0000"/>
+      <rect x="14" y="0" width="32" height="30" rx="4" fill="#CC0000"/>
+      <rect x="0" y="0" width="18" height="30" rx="4" fill="#C41230"/>
+      <text x="23" y="13" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6" fill="white" letterSpacing=".3">UNION</text>
+      <text x="23" y="23" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6" fill="white" letterSpacing=".3">PAY</text>
+    </svg>
+  );
+}
+
+function IconUSDC() {
+  return (
+    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="USDC Crypto">
+      <rect width="46" height="30" rx="4" fill="#2775CA"/>
+      <circle cx="18" cy="15" r="9" fill="#2775CA" stroke="white" strokeWidth="1.5"/>
+      <text x="18" y="19" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="11" fill="white">$</text>
+      <text x="32" y="13" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6.5" fill="white">USD</text>
+      <text x="32" y="21" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6.5" fill="white">COIN</text>
+    </svg>
+  );
+}
+
+function IconIdeal() {
+  return (
+    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="iDEAL">
+      <rect width="46" height="30" rx="4" fill="white"/>
+      <rect x=".5" y=".5" width="45" height="29" rx="3.5" stroke="#E0E0E0" strokeWidth=".7"/>
+      <text x="23" y="20" textAnchor="middle" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontSize="12" fill="#C0006D">iDEAL</text>
+    </svg>
+  );
+}
+
+function IconKBC() {
+  return (
+    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="KBC Direct Pay">
+      <rect width="46" height="30" rx="4" fill="#1B4284"/>
+      <text x="23" y="14" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="10" fill="white" letterSpacing=".5">KBC</text>
+      <text x="23" y="25" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="600" fontSize="6" fill="#7EC8E3" letterSpacing=".2">Direct Pay</text>
+    </svg>
+  );
+}
+
+function IconBelfius() {
+  return (
+    <svg width="46" height="30" viewBox="0 0 46 30" fill="none" aria-label="Belfius Direct Pay">
+      <rect width="46" height="30" rx="4" fill="#CC0033"/>
+      <text x="23" y="14" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="8" fill="white" letterSpacing=".3">Belfius</text>
+      <text x="23" y="25" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="600" fontSize="6" fill="white" letterSpacing=".2">Direct Pay</text>
     </svg>
   );
 }
 
 const PAYMENT_ICONS = [
+  <IconBancontact key="bc" />,
   <IconVisa key="visa" />,
   <IconMastercard key="mc" />,
-  <IconBancontact key="bc" />,
   <IconMaestro key="maestro" />,
-  <IconApplePay key="applepay" />,
-  <IconGooglePay key="gpay" />,
-  <IconShopPay key="shoppay" />,
+  <IconUnionPay key="unionpay" />,
+  <IconAmex key="amex" />,
+  <IconPayPal key="paypal" />,
+  <IconUSDC key="usdc" />,
+  <IconIdeal key="ideal" />,
+  <IconKBC key="kbc" />,
+  <IconBelfius key="belfius" />,
 ];
 
 const SOCIALS = [
