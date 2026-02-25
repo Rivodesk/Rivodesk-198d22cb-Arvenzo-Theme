@@ -1,4 +1,5 @@
 import { getAllProducts } from '@/lib/shopify';
+import { getShopReviews } from '@/lib/judgeme';
 import Hero from '@/components/Hero';
 import Marquee from '@/components/Marquee';
 import TrustBar from '@/components/TrustBar';
@@ -11,7 +12,10 @@ import Newsletter from '@/components/Newsletter';
 export const revalidate = 300;
 
 export default async function HomePage() {
-  const products = await getAllProducts();
+  const [products, reviewData] = await Promise.all([
+    getAllProducts(),
+    getShopReviews(4),
+  ]);
 
   return (
     <>
@@ -21,7 +25,7 @@ export default async function HomePage() {
       <FeaturedProducts products={products} />
       <LifestyleSection products={products} />
       <BrandStory />
-      <Reviews />
+      <Reviews data={reviewData} />
       <Newsletter />
     </>
   );
