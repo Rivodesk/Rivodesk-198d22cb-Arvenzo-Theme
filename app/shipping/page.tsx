@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Verzending & levering | Arvenzo',
-  description: 'Alles over verzendtijden, tarieven en levering bij Arvenzo.',
+  title: 'Verzendbeleid | Arvenzo',
+  description: 'Verzendbeleid van Arvenzo conform Belgisch Wetboek van Economisch Recht en EU-richtlijnen voor e-commerce.',
 };
 
 export default function ShippingPage() {
@@ -16,72 +16,103 @@ export default function ShippingPage() {
           <span className="text-arvenzo-ink">Verzending</span>
         </nav>
 
-        <h1 className="font-heading font-black text-4xl text-arvenzo-ink mb-3">Verzending & levering</h1>
-        <p className="text-arvenzo-muted font-sans mb-12">Alles wat je moet weten over je bestelling.</p>
+        <h1 className="font-heading font-black text-4xl text-arvenzo-ink mb-3">Verzendbeleid</h1>
+        <p className="text-arvenzo-muted font-sans mb-2 text-sm">
+          Bij Arvenzo streven we naar een transparante en betrouwbare bezorgervaring. Dit verzendbeleid is van toepassing op alle bestellingen geplaatst via <strong>www.arvenzo.be</strong>.
+        </p>
+        <p className="text-arvenzo-muted font-sans mb-12 text-xs">Laatste update: 14 januari 2026</p>
 
-        <div className="space-y-10">
+        <div className="font-sans text-sm text-arvenzo-muted leading-relaxed space-y-10">
+
           <section>
-            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">Verzendtarieven</h2>
+            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">1. Verwerkingstijd</h2>
+            <p className="mb-3">De verwerkingstijd is de periode tussen de ontvangst van uw bestelling en het moment dat het pakket aan de vervoerder wordt overhandigd.</p>
+            <ul className="space-y-2">
+              <li>• <strong className="text-arvenzo-ink">Standaard verwerkingstijd:</strong> Alle bestellingen worden verwerkt binnen <strong className="text-arvenzo-ink">2 tot 14 werkdagen</strong>.</li>
+              <li>• <strong className="text-arvenzo-ink">Cut-off tijden:</strong> Bestellingen geplaatst na 16:00 uur op werkdagen worden vanaf de eerstvolgende werkdag in behandeling genomen.</li>
+              <li>• <strong className="text-arvenzo-ink">Uitzonderingen:</strong> Tijdens drukke perioden (feestdagen, acties, weekends) of bij gepersonaliseerde artikelen kan de verwerkingstijd afwijken.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">2. Leveringstermijnen</h2>
+            <p className="mb-4">De geschatte levertijd is de optelsom van de verwerkingstijd en de transporttijd van de koerier. Conform de wettelijke bepalingen (Art. VI.43 WER) verbindt Arvenzo zich ertoe de goederen uiterlijk binnen <strong className="text-arvenzo-ink">30 dagen</strong> na bestelling te leveren, tenzij anders overeengekomen.</p>
             <div className="overflow-x-auto rounded-2xl border border-arvenzo-cream-dark">
               <table className="w-full text-sm font-sans">
                 <thead>
                   <tr className="bg-arvenzo-cream-dark text-arvenzo-ink">
-                    <th className="text-left px-5 py-3 font-semibold">Land</th>
-                    <th className="text-left px-5 py-3 font-semibold">Standaard</th>
-                    <th className="text-left px-5 py-3 font-semibold">Gratis verzending v.a.</th>
+                    <th className="text-left px-5 py-3 font-semibold">Bestemming</th>
+                    <th className="text-left px-5 py-3 font-semibold">Leveringstermijn na verzending</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-arvenzo-cream-dark">
                   {[
-                    ['België', '€3,95', '€50'],
-                    ['Nederland', '€4,95', '€50'],
-                    ['Duitsland', '€5,95', '€75'],
-                    ['Frankrijk', '€5,95', '€75'],
-                    ['Overig EU', '€7,95', '€100'],
-                  ].map(([land, prijs, gratis]) => (
+                    ['België', '1 tot 14 werkdagen'],
+                    ['Nederland', '1 tot 14 werkdagen'],
+                    ['Andere EU-landen', '1 tot 14 werkdagen'],
+                  ].map(([land, tijd]) => (
                     <tr key={land} className="bg-arvenzo-cream hover:bg-arvenzo-cream-dark/40 transition-colors">
                       <td className="px-5 py-3 text-arvenzo-ink font-medium">{land}</td>
-                      <td className="px-5 py-3 text-arvenzo-muted">{prijs}</td>
-                      <td className="px-5 py-3 text-arvenzo-brown font-semibold">{gratis}</td>
+                      <td className="px-5 py-3 text-arvenzo-muted">{tijd}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            <p className="mt-3 text-xs italic">Let op: Leveringstermijnen zijn indicatief. Factoren zoals stakingen bij postdiensten of extreme weersomstandigheden kunnen de bezorging vertragen.</p>
           </section>
 
           <section>
-            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">Levertijden</h2>
-            <div className="bg-arvenzo-cream rounded-2xl p-6 space-y-4 font-sans text-sm text-arvenzo-muted">
-              <p>Omdat onze producten on-demand worden gedrukt in Europa, gelden de volgende levertijden:</p>
-              <ul className="space-y-2">
-                <li className="flex gap-3"><span className="text-arvenzo-brown font-bold shrink-0">2-4 werkdagen</span><span>Productietime (drukken + afwerking)</span></li>
-                <li className="flex gap-3"><span className="text-arvenzo-brown font-bold shrink-0">1-3 werkdagen</span><span>Verzending binnen België en Nederland</span></li>
-                <li className="flex gap-3"><span className="text-arvenzo-brown font-bold shrink-0">3-5 werkdagen</span><span>Verzending naar de rest van Europa</span></li>
-              </ul>
-              <p className="pt-2 border-t border-arvenzo-cream-dark">Totale levertijd: <strong className="text-arvenzo-ink">3-7 werkdagen</strong> voor België en Nederland, <strong className="text-arvenzo-ink">5-9 werkdagen</strong> voor overig Europa.</p>
-            </div>
+            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">3. Verzendkosten en Tarieven</h2>
+            <p>De verzendkosten worden duidelijk weergegeven in de checkout voordat u de betaling definitief bevestigt.</p>
           </section>
 
           <section>
-            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">Tracking</h2>
-            <p className="font-sans text-sm text-arvenzo-muted leading-relaxed">
-              Zodra je bestelling verzonden is, ontvang je een bevestigingsmail met een trackingnummer. Hiermee kun je de status van je pakket live volgen via de website van de vervoerder.
-            </p>
+            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">4. Bezorgdiensten en Track & Trace</h2>
+            <p className="mb-3">Arvenzo werkt samen met gerenommeerde partners zoals bpost, PostNL en DHL.</p>
+            <p>Zodra uw pakket ons magazijn verlaat, ontvangt u een automatische verzendbevestiging via e-mail met daarin een <strong className="text-arvenzo-ink">Track & Trace-code</strong>. Hiermee kunt u de status van uw zending online opvolgen.</p>
           </section>
 
           <section>
-            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">Productie in Europa</h2>
-            <p className="font-sans text-sm text-arvenzo-muted leading-relaxed">
-              Alle Arvenzo-producten worden on-demand gedrukt in onze printpartnersfaciliteiten in Europa. Dit betekent dat er geen overproductie is, wat goed is voor het milieu. Elk stuk wordt speciaal voor jou gemaakt.
-            </p>
+            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">5. Leveringsopties</h2>
+            <ul className="space-y-2">
+              <li>• <strong className="text-arvenzo-ink">Thuislevering:</strong> Bezorging op het door u opgegeven adres.</li>
+              <li>• <strong className="text-arvenzo-ink">Afhaalpunten/Pakketautomaten:</strong> Niet beschikbaar.</li>
+              <li>• <strong className="text-arvenzo-ink">Click & Collect:</strong> Afhalen op onze locatie te Begijnendijk is niet mogelijk.</li>
+            </ul>
           </section>
 
-          <div className="bg-arvenzo-brown/5 border border-arvenzo-brown/10 rounded-2xl p-5 flex gap-4">
-            <span className="text-2xl">💬</span>
-            <div>
-              <p className="font-heading font-semibold text-arvenzo-ink text-sm">Vragen over je bestelling?</p>
-              <p className="font-sans text-xs text-arvenzo-muted mt-1">Neem contact op via <Link href="/contact" className="text-arvenzo-brown hover:underline">ons contactformulier</Link> of mail naar <a href="mailto:info@arvenzo.be" className="text-arvenzo-brown hover:underline">info@arvenzo.be</a>.</p>
+          <section>
+            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">6. Problemen bij levering en Aansprakelijkheid</h2>
+
+            <h3 className="font-heading font-semibold text-base text-arvenzo-ink mb-2">6.1 Afwezigheid bij levering</h3>
+            <p className="mb-4">Indien u niet aanwezig bent op het moment van levering, zal de vervoerder ofwel een tweede poging ondernemen, ofwel het pakket afleveren bij een nabijgelegen afhaalpunt. Indien een pakket retour komt omdat het niet werd afgehaald of een foutief adres werd opgegeven, behouden wij ons het recht voor om de kosten voor een herverzending aan te rekenen.</p>
+
+            <h3 className="font-heading font-semibold text-base text-arvenzo-ink mb-2">6.2 Beschadigde pakketten</h3>
+            <p className="mb-4">Conform de EU-wetgeving gaat het risico van verlies of beschadiging op u over zodra u (of een door u aangewezen derde) de goederen fysiek in bezit heeft gekregen.<br /><br />
+            <strong className="text-arvenzo-ink">Belangrijk:</strong> Controleer de verpakking bij ontvangst. Is het pakket zichtbaar beschadigd? Weiger de zending of laat de koerier een schriftelijke aantekening maken. Meld transportschade binnen 24 uur aan ons via <a href="mailto:support@arvenzo.eu" className="text-arvenzo-brown hover:underline">support@arvenzo.eu</a>.</p>
+
+            <h3 className="font-heading font-semibold text-base text-arvenzo-ink mb-2">6.3 Verloren pakketten</h3>
+            <p>Indien een pakket meer dan 10 werkdagen buiten de verwachte levertermijn vertraagd is, gelieve contact op te nemen voor een onderzoek bij de vervoerder.</p>
+          </section>
+
+          <section>
+            <h2 className="font-heading font-bold text-xl text-arvenzo-ink mb-4">7. Internationale Verzending (buiten EU)</h2>
+            <ul className="space-y-2">
+              <li>• <strong className="text-arvenzo-ink">Invoerrechten:</strong> Alle eventuele douanerechten, invoerbelastingen en administratieve kosten vallen volledig onder de verantwoordelijkheid van de koper.</li>
+              <li>• <strong className="text-arvenzo-ink">BTW:</strong> Bestellingen buiten de EU kunnen onderhevig zijn aan lokale BTW-regels bij invoer.</li>
+              <li>• <strong className="text-arvenzo-ink">Vertraging:</strong> Wij zijn niet verantwoordelijk voor vertragingen veroorzaakt door douaneprocedures.</li>
+            </ul>
+          </section>
+
+          <div className="bg-arvenzo-brown/5 border border-arvenzo-brown/10 rounded-2xl p-6">
+            <h3 className="font-heading font-semibold text-arvenzo-ink text-sm mb-3">Contact & Klachten</h3>
+            <div className="space-y-1 text-xs text-arvenzo-muted">
+              <p><strong className="text-arvenzo-ink">Arvenzo</strong> · Van Eylen Jonas</p>
+              <p>Pandhoevestraat 62, 3130 Begijnendijk, België</p>
+              <p>E-mail: <a href="mailto:support@arvenzo.eu" className="text-arvenzo-brown hover:underline">support@arvenzo.eu</a></p>
+              <p>Tel: <a href="tel:+3216982490" className="text-arvenzo-brown hover:underline">+32 16 98 24 90</a></p>
+              <p>Website: www.arvenzo.be</p>
             </div>
           </div>
         </div>

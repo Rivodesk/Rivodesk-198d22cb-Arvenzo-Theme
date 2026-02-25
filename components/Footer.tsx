@@ -209,8 +209,9 @@ export default function Footer() {
         {/* Legal bottom bar */}
         <div className="border-t border-white/5 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-arvenzo-cream/20 font-sans">
           <div className="space-y-1">
-            <span className="block">© {new Date().getFullYear()} Arvenzo · Van Eylen Jonas · 3130 Begijnendijk, België</span>
-            <span className="block">E-mail: info@arvenzo.be · Belgisch recht van toepassing · Bevoegde rechtbank: arrondissement Leuven</span>
+            <span className="block">© {new Date().getFullYear()} Arvenzo · Van Eylen Jonas · Pandhoevestraat 62, 3130 Begijnendijk, België</span>
+            <span className="block">KBO: 1027.570.389 · BTW: BE1027.570.389 · support@arvenzo.eu · +32 16 98 24 90</span>
+            <span className="block">Belgisch recht van toepassing · Bevoegde rechtbank: arrondissement Leuven</span>
             <span className="block">
               Alle prijzen zijn inclusief BTW ·{' '}
               <Link href="/privacy" className="hover:text-arvenzo-orange/60 transition-colors">Privacybeleid</Link>
