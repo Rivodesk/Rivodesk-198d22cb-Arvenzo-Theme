@@ -18,7 +18,7 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
           src="/images/man-sweatshirt.jpg"
           alt="Man in Arvenzo sweatshirt"
           fill
-          className="object-cover object-top opacity-75"
+          className="object-cover object-top scale-[1.25] origin-top opacity-75"
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-arvenzo-dark/85 via-arvenzo-dark/40 to-transparent" />
@@ -54,7 +54,7 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
             src="/images/woman-hoodie.jpg"
             alt="Vrouw in Arvenzo hoodie"
             fill
-            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            className="object-cover object-top scale-[1.2] origin-top transition-transform duration-700 group-hover:scale-[1.25]"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-arvenzo-dark/75 via-arvenzo-dark/10 to-transparent" />
@@ -80,7 +80,7 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
             src="/images/woman-mug.jpg"
             alt="Vrouw met Arvenzo mug"
             fill
-            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            className="object-cover object-top scale-[1.2] origin-top transition-transform duration-700 group-hover:scale-[1.25]"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-arvenzo-dark/75 via-arvenzo-dark/10 to-transparent" />
