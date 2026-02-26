@@ -1,152 +1,19 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import MerchantBadge from '@/components/MerchantBadge';
 
-/* ─── Payment icons ──────────────────────────────────────────────────────────
-   Only the methods active on Belgian Shopify Payments.
-   All icons: 46×30px, rounded corners, flat design.
-   ─────────────────────────────────────────────────────────────────────────── */
-
-function IconVisa() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="Visa">
-      <rect width="46" height="30" rx="4" fill="white"/>
-      <rect x=".5" y=".5" width="45" height="29" rx="3.5" stroke="#E0E0E0" strokeWidth=".7"/>
-      {/* Visa blue bar bottom */}
-      <rect x="0" y="21" width="46" height="9" rx="0" fill="#1A1F71"/>
-      <rect x="0" y="21" width="46" height="9" fill="#1A1F71"/>
-      <path d="M0 25h46v1H0z" fill="#F7A800"/>
-      {/* VISA wordmark – bold italic navy */}
-      <text x="23" y="17" textAnchor="middle" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontStyle="italic" fontSize="13" fill="#1A1F71">VISA</text>
-    </svg>
-  );
-}
-
-function IconMastercard() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="Mastercard">
-      <rect width="46" height="30" rx="4" fill="white"/>
-      <rect x=".5" y=".5" width="45" height="29" rx="3.5" stroke="#E0E0E0" strokeWidth=".7"/>
-      <circle cx="18" cy="15" r="9" fill="#EB001B"/>
-      <circle cx="28" cy="15" r="9" fill="#F79E1B"/>
-      {/* overlap blend */}
-      <path d="M23 7.4a9 9 0 0 1 0 15.2A9 9 0 0 1 23 7.4z" fill="#FF5F00"/>
-    </svg>
-  );
-}
-
-function IconBancontact() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="Bancontact">
-      <rect width="46" height="30" rx="4" fill="#005498"/>
-      {/* Yellow bottom */}
-      <path d="M0 20h46v6a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4v-6z" fill="#FEC910"/>
-      {/* BC text white */}
-      <text x="23" y="15" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="9" fill="white" letterSpacing=".5">Bancontact</text>
-      {/* BC on yellow */}
-      <text x="23" y="26.5" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="8" fill="#005498">BC</text>
-    </svg>
-  );
-}
-
-function IconMaestro() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="Maestro">
-      <rect width="46" height="30" rx="4" fill="white"/>
-      <rect x=".5" y=".5" width="45" height="29" rx="3.5" stroke="#E0E0E0" strokeWidth=".7"/>
-      <circle cx="19" cy="13" r="8" fill="#0099DF"/>
-      <circle cx="27" cy="13" r="8" fill="#EB001B" fillOpacity=".88"/>
-      <text x="23" y="27" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="600" fontSize="6.5" fill="#555">Maestro</text>
-    </svg>
-  );
-}
-
-function IconAmex() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="American Express">
-      <rect width="46" height="30" rx="4" fill="#2E77BC"/>
-      <text x="23" y="19" textAnchor="middle" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontSize="9" fill="white" letterSpacing="1">AMEX</text>
-    </svg>
-  );
-}
-
-function IconPayPal() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="PayPal">
-      <rect width="46" height="30" rx="4" fill="white"/>
-      <rect x=".5" y=".5" width="45" height="29" rx="3.5" stroke="#E0E0E0" strokeWidth=".7"/>
-      <text x="10" y="20" fontFamily="Arial Black,sans-serif" fontWeight="900" fontStyle="italic" fontSize="13" fill="#003087">P</text>
-      <text x="17" y="20" fontFamily="Arial Black,sans-serif" fontWeight="900" fontStyle="italic" fontSize="13" fill="#009CDE">P</text>
-      <text x="23" y="19.5" fontFamily="Arial,sans-serif" fontWeight="600" fontSize="8.5" fill="#003087">ayPal</text>
-    </svg>
-  );
-}
-
-function IconUnionPay() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="UnionPay">
-      <rect width="46" height="30" rx="4" fill="#CC0000"/>
-      <rect x="14" y="0" width="32" height="30" rx="4" fill="#CC0000"/>
-      <rect x="0" y="0" width="18" height="30" rx="4" fill="#C41230"/>
-      <text x="23" y="13" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6" fill="white" letterSpacing=".3">UNION</text>
-      <text x="23" y="23" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6" fill="white" letterSpacing=".3">PAY</text>
-    </svg>
-  );
-}
-
-function IconUSDC() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="USDC Crypto">
-      <rect width="46" height="30" rx="4" fill="#2775CA"/>
-      <circle cx="18" cy="15" r="9" fill="#2775CA" stroke="white" strokeWidth="1.5"/>
-      <text x="18" y="19" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="11" fill="white">$</text>
-      <text x="32" y="13" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6.5" fill="white">USD</text>
-      <text x="32" y="21" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6.5" fill="white">COIN</text>
-    </svg>
-  );
-}
-
-function IconIdeal() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="iDEAL">
-      <rect width="46" height="30" rx="4" fill="white"/>
-      <rect x=".5" y=".5" width="45" height="29" rx="3.5" stroke="#E0E0E0" strokeWidth=".7"/>
-      <text x="23" y="20" textAnchor="middle" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontSize="12" fill="#C0006D">iDEAL</text>
-    </svg>
-  );
-}
-
-function IconKBC() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="KBC Direct Pay">
-      <rect width="46" height="30" rx="4" fill="#1B4284"/>
-      <text x="23" y="14" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="10" fill="white" letterSpacing=".5">KBC</text>
-      <text x="23" y="25" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="600" fontSize="6" fill="#7EC8E3" letterSpacing=".2">Direct Pay</text>
-    </svg>
-  );
-}
-
-function IconBelfius() {
-  return (
-    <svg width="58" height="38" viewBox="0 0 46 30" fill="none" aria-label="Belfius Direct Pay">
-      <rect width="46" height="30" rx="4" fill="#CC0033"/>
-      <text x="23" y="14" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="8" fill="white" letterSpacing=".3">Belfius</text>
-      <text x="23" y="25" textAnchor="middle" fontFamily="Arial,sans-serif" fontWeight="600" fontSize="6" fill="white" letterSpacing=".2">Direct Pay</text>
-    </svg>
-  );
-}
-
-const PAYMENT_ICONS = [
-  <IconBancontact key="bc" />,
-  <IconVisa key="visa" />,
-  <IconMastercard key="mc" />,
-  <IconMaestro key="maestro" />,
-  <IconUnionPay key="unionpay" />,
-  <IconAmex key="amex" />,
-  <IconPayPal key="paypal" />,
-  <IconUSDC key="usdc" />,
-  <IconIdeal key="ideal" />,
-  <IconKBC key="kbc" />,
-  <IconBelfius key="belfius" />,
+const PAYMENT_METHODS = [
+  { src: '/images/payments/Bancontact_logo.png',   alt: 'Bancontact' },
+  { src: '/images/payments/VISA-logo.png',          alt: 'Visa' },
+  { src: '/images/payments/Mastercard-logo.png',    alt: 'Mastercard' },
+  { src: '/images/payments/Maestro-Logo-1992.png',  alt: 'Maestro' },
+  { src: '/images/payments/amex.png',               alt: 'American Express' },
+  { src: '/images/payments/Paypal_2014_logo.png',   alt: 'PayPal' },
+  { src: '/images/payments/ideal.png',              alt: 'iDEAL' },
+  { src: '/images/payments/kbc.png',                alt: 'KBC' },
+  { src: '/images/payments/belfius.png',            alt: 'Belfius' },
+  { src: '/images/payments/UnionPay_logo.svg.png',  alt: 'UnionPay' },
+  { src: '/images/payments/usdc-coin.png',          alt: 'USDC' },
 ];
 
 const SOCIALS = [
@@ -225,8 +92,18 @@ export default function Footer() {
         {/* Payment icons */}
         <div className="border-t border-white/5 pt-6 pb-4">
           <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-arvenzo-cream/20 mb-3">Veilig betalen via</p>
-          <div className="flex flex-wrap gap-2">
-            {PAYMENT_ICONS}
+          <div className="flex flex-wrap gap-2 items-center">
+            {PAYMENT_METHODS.map((m) => (
+              <div key={m.alt} className="bg-white rounded-md px-2 py-1.5 flex items-center justify-center h-9 w-14">
+                <Image
+                  src={m.src}
+                  alt={m.alt}
+                  width={48}
+                  height={28}
+                  className="object-contain max-h-6 w-auto"
+                />
+              </div>
+            ))}
           </div>
         </div>
 
