@@ -17,7 +17,7 @@ export async function GET() {
     client_id: clientId,
     response_type: 'code',
     redirect_uri: `${appUrl}/api/auth/callback`,
-    scope: 'openid email profile address',
+    scope: 'openid email customer-account-api:full',
     state,
     nonce,
     code_challenge: codeChallenge,

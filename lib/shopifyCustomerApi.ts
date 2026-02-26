@@ -37,7 +37,7 @@ const QUERY = `
 export async function getCustomerAccountProfile(
   accessToken: string,
 ): Promise<CustomerAccountProfile | null> {
-  const endpoint = `https://${process.env.SHOPIFY_STORE_DOMAIN}/account/customer/api/2024-07/graphql.json`;
+  const endpoint = `https://${process.env.SHOPIFY_STORE_DOMAIN}/customer/api/2024-07/graphql`;
 
   try {
     const res = await fetch(endpoint, {
