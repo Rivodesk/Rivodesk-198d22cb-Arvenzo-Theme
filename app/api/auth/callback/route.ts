@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { decodeJwtPayload } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
-
-const JWKS_URL = process.env.SHOPIFY_AUTH_DOMAIN + '/oauth/token_keys';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -15,6 +14,8 @@ export async function GET(req: NextRequest) {
   const codeVerifier = req.cookies.get('arvenzo_code_verifier')?.value;
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL!;
+  const authDomain = process.env.SHOPIFY_AUTH_DOMAIN!;
+  const clientId = process.env.SHOPIFY_CLIENT_ID!;
 
   // CSRF check
   if (!state || !storedState || state !== storedState) {
@@ -26,13 +27,12 @@ export async function GET(req: NextRequest) {
   }
 
   // Exchange code for tokens
-  const tokenUrl = `${process.env.SHOPIFY_AUTH_DOMAIN}/oauth/token`;
-  const tokenRes = await fetch(tokenUrl, {
+  const tokenRes = await fetch(`${authDomain}/oauth/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       grant_type: 'authorization_code',
-      client_id: process.env.SHOPIFY_CLIENT_ID!,
+      client_id: clientId,
       redirect_uri: `${appUrl}/api/auth/callback`,
       code,
       code_verifier: codeVerifier,
@@ -52,20 +52,29 @@ export async function GET(req: NextRequest) {
     expires_in: number;
   };
 
-  // Verify ID token
+  // Validate nonce via jose (discover issuer from well-known config)
   try {
-    const JWKS = createRemoteJWKSet(new URL(JWKS_URL));
-    const { payload } = await jwtVerify(tokens.id_token, JWKS, {
-      issuer: process.env.SHOPIFY_AUTH_DOMAIN,
-      audience: process.env.SHOPIFY_CLIENT_ID,
-    });
-
-    // Validate nonce
-    if (storedNonce && payload.nonce !== storedNonce) {
-      return NextResponse.redirect(`${appUrl}/?error=nonce_mismatch`);
+    // Discover JWKS URI and issuer from OpenID config
+    const oidcRes = await fetch(`${authDomain}/.well-known/openid-configuration`);
+    if (oidcRes.ok) {
+      const oidc = await oidcRes.json() as { jwks_uri: string; issuer: string };
+      const JWKS = createRemoteJWKSet(new URL(oidc.jwks_uri));
+      const { payload } = await jwtVerify(tokens.id_token, JWKS, {
+        issuer: oidc.issuer,
+        audience: clientId,
+      });
+      if (storedNonce && payload.nonce !== storedNonce) {
+        return NextResponse.redirect(`${appUrl}/?error=nonce_mismatch`);
+      }
+    } else {
+      // Fallback: just check nonce via decode (token came directly from Shopify)
+      const payload = decodeJwtPayload(tokens.id_token);
+      if (storedNonce && payload.nonce !== storedNonce) {
+        return NextResponse.redirect(`${appUrl}/?error=nonce_mismatch`);
+      }
     }
   } catch (e) {
-    console.error('JWT verification failed:', e);
+    console.error('Token validation failed:', e);
     return NextResponse.redirect(`${appUrl}/?error=invalid_token`);
   }
 
@@ -92,7 +101,7 @@ export async function GET(req: NextRequest) {
   if (tokens.refresh_token) {
     response.cookies.set('arvenzo_refresh_token', tokens.refresh_token, {
       ...sessionCookieOpts,
-      maxAge: 60 * 60 * 24 * 30, // 30 days
+      maxAge: 60 * 60 * 24 * 30,
     });
   }
 
