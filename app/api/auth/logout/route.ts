@@ -6,6 +6,7 @@ const SESSION_COOKIES = [
   'arvenzo_access_token',
   'arvenzo_refresh_token',
   'arvenzo_id_token',
+  'arvenzo_ca_token',
   'arvenzo_auth_state',
   'arvenzo_auth_nonce',
   'arvenzo_code_verifier',

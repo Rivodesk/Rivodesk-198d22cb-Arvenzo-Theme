@@ -78,6 +78,30 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(`${appUrl}/?error=invalid_token`);
   }
 
+  // Exchange access_token for a Customer Account API token (shcat_ prefix)
+  let caToken: string | null = null;
+  try {
+    const caRes = await fetch(`${authDomain}/oauth/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+        client_id: clientId,
+        subject_token: tokens.access_token,
+        subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
+        requested_token_type: 'urn:shopify:params:oauth:token-type:customer-api-token',
+      }).toString(),
+    });
+    if (caRes.ok) {
+      const caData = await caRes.json() as { access_token?: string };
+      caToken = caData.access_token ?? null;
+    } else {
+      console.error('Customer API token exchange failed:', await caRes.text());
+    }
+  } catch (e) {
+    console.error('Customer API token exchange error:', e);
+  }
+
   const response = NextResponse.redirect(`${appUrl}/account`);
 
   const sessionCookieOpts = {
@@ -109,6 +133,13 @@ export async function GET(req: NextRequest) {
     ...sessionCookieOpts,
     maxAge: 3600,
   });
+
+  if (caToken) {
+    response.cookies.set('arvenzo_ca_token', caToken, {
+      ...sessionCookieOpts,
+      maxAge: 3600,
+    });
+  }
 
   return response;
 }
