@@ -15,7 +15,8 @@ export async function customerAccountQuery<T>(
   });
 
   if (!res.ok) {
-    throw new Error(`Customer Account API error: ${res.status}`);
+    const body = await res.text();
+    throw new Error(`Customer Account API ${res.status}: ${body}`);
   }
 
   const json = await res.json() as { data: T; errors?: { message: string }[] };

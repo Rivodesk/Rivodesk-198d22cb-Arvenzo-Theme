@@ -17,7 +17,7 @@ export async function GET() {
     client_id: clientId,
     response_type: 'code',
     redirect_uri: `${appUrl}/api/auth/callback`,
-    scope: 'openid email',
+    scope: 'openid email https://api.customers.com/auth/customer.graphql',
     state,
     nonce,
     code_challenge: codeChallenge,
