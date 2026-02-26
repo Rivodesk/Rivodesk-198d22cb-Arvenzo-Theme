@@ -50,10 +50,7 @@ export async function GET(req: NextRequest) {
     refresh_token?: string;
     id_token: string;
     expires_in: number;
-    [key: string]: unknown;
   };
-  console.log('[callback] token response keys:', Object.keys(tokens));
-  console.log('[callback] access_token prefix:', tokens.access_token?.slice(0, 12));
 
   // Validate nonce via jose (discover issuer from well-known config)
   try {

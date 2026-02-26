@@ -67,7 +67,7 @@ export async function getCustomerAccountProfile(
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: accessToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query: QUERY }),

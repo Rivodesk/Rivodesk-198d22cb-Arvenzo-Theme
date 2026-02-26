@@ -11,8 +11,7 @@ export const metadata = { title: 'Mijn gegevens' };
 export default async function AccountPage() {
   const cookieStore = cookies();
   const idToken = cookieStore.get('arvenzo_id_token')?.value;
-  const accessToken = cookieStore.get('arvenzo_ca_token')?.value
-    ?? cookieStore.get('arvenzo_access_token')?.value;
+  const accessToken = cookieStore.get('arvenzo_access_token')?.value;
   if (!idToken) redirect('/api/auth/login');
 
   let email = '';
