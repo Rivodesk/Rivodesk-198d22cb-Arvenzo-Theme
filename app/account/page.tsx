@@ -2,6 +2,8 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { decodeJwtPayload, getCustomerIdFromToken } from '@/lib/auth';
 import { getCustomerById, getCustomerByEmail } from '@/lib/shopifyAdmin';
+import { getCustomerAccountProfile } from '@/lib/shopifyCustomerApi';
+import type { AdminCustomer } from '@/lib/shopifyAdmin';
 import { PersonalInfoForm, AddressForm } from './CustomerForm';
 
 export const metadata = { title: 'Mijn gegevens' };
@@ -9,6 +11,7 @@ export const metadata = { title: 'Mijn gegevens' };
 export default async function AccountPage() {
   const cookieStore = cookies();
   const idToken = cookieStore.get('arvenzo_id_token')?.value;
+  const accessToken = cookieStore.get('arvenzo_access_token')?.value;
   if (!idToken) redirect('/api/auth/login');
 
   let email = '';
@@ -19,35 +22,52 @@ export default async function AccountPage() {
     redirect('/api/auth/login');
   }
 
-  // Log JWT payload to diagnose sub claim format
-  try {
-    const raw = decodeJwtPayload(idToken);
-    console.log('[account] JWT payload:', JSON.stringify({ sub: raw.sub, email: raw.email }));
-  } catch { /* ignore */ }
-
-  // Prefer direct ID lookup from JWT sub claim; fall back to email search
-  const customerId = getCustomerIdFromToken(idToken);
-  console.log('[account] email:', email, '| customerId from JWT:', customerId);
-
-  // Always end up with a full /customers/{id}.json fetch.
-  // The search endpoint returns incomplete data for Login-with-Shop customers.
-  let resolvedId = customerId;
+  // Resolve the numeric customer ID
+  let resolvedId = getCustomerIdFromToken(idToken);
   if (!resolvedId) {
     const found = await getCustomerByEmail(email).catch(() => null);
     resolvedId = found?.id ?? null;
   }
 
-  const customer = resolvedId ? await getCustomerById(resolvedId) : null;
-
-  console.log('[account] customer:', JSON.stringify(customer));
-
-  if (!customer) {
+  if (!resolvedId) {
     return (
       <div className="bg-white rounded-2xl p-6 text-center text-arvenzo-muted font-sans">
         Kon gegevens niet laden. Probeer opnieuw.
       </div>
     );
   }
+
+  // Customer Account API: full profile data (works on all Shopify plans)
+  const profile = accessToken ? await getCustomerAccountProfile(accessToken) : null;
+
+  // Admin API: only used to get the address ID for mutations
+  const adminCustomer = await getCustomerById(resolvedId);
+  const addressId = adminCustomer?.default_address?.id;
+
+  // Build unified customer object for the form components
+  const customer: AdminCustomer = {
+    id: resolvedId,
+    first_name: profile?.firstName ?? '',
+    last_name: profile?.lastName ?? '',
+    email: profile?.emailAddress?.emailAddress ?? email,
+    phone: profile?.phoneNumber?.phoneNumber ?? null,
+    default_address: (profile?.defaultAddress || addressId)
+      ? {
+          id: addressId ?? 0,
+          first_name: profile?.defaultAddress?.firstName ?? profile?.firstName ?? '',
+          last_name: profile?.defaultAddress?.lastName ?? profile?.lastName ?? '',
+          address1: profile?.defaultAddress?.address1 ?? '',
+          address2: profile?.defaultAddress?.address2 ?? null,
+          city: profile?.defaultAddress?.city ?? '',
+          zip: profile?.defaultAddress?.zip ?? '',
+          country: '',
+          country_code: profile?.defaultAddress?.countryCode ?? adminCustomer?.default_address?.country_code ?? 'BE',
+          province: null,
+          default: true,
+        }
+      : null,
+    addresses: [],
+  };
 
   return (
     <div className="grid gap-4">

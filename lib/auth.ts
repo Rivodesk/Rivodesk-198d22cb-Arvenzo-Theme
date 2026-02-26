@@ -34,9 +34,12 @@ export function decodeJwtPayload(token: string): Record<string, unknown> {
 export function getCustomerIdFromToken(token: string): number | null {
   try {
     const payload = decodeJwtPayload(token);
-    const sub = payload.sub as string | undefined;
-    if (!sub) return null;
-    const match = sub.match(/Customer\/(\d+)$/);
+    const sub = payload.sub;
+    if (sub == null) return null;
+    // sub can be a plain number (e.g. 9863740981591)
+    if (typeof sub === 'number') return sub;
+    // Or a GID string: "gid://shopify/Customer/12345"
+    const match = String(sub).match(/(?:Customer\/)?(\d+)$/);
     return match ? parseInt(match[1], 10) : null;
   } catch {
     return null;
