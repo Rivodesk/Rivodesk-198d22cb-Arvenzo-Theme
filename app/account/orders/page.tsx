@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { decodeJwtPayload } from '@/lib/auth';
 import { getCustomerByEmail, getOrdersByCustomerId, type AdminOrder } from '@/lib/shopifyAdmin';
+import Link from 'next/link';
 
 export const metadata = { title: 'Mijn bestellingen' };
 
@@ -15,24 +16,18 @@ const FULFILLMENT_LABEL: Record<string, string> = {
   partial: 'Gedeeltelijk verstuurd', restocked: 'Teruggestuurd',
 };
 const FINANCIAL_COLOR: Record<string, string> = {
-  paid: 'bg-green-100 text-green-700',
-  pending: 'bg-yellow-100 text-yellow-700',
-  refunded: 'bg-red-100 text-red-600',
-  voided: 'bg-red-100 text-red-600',
+  paid: 'bg-green-100 text-green-700', pending: 'bg-yellow-100 text-yellow-700',
+  refunded: 'bg-red-100 text-red-600', voided: 'bg-red-100 text-red-600',
   authorized: 'bg-blue-100 text-blue-700',
 };
 const FULFILLMENT_COLOR: Record<string, string> = {
-  fulfilled: 'bg-blue-100 text-blue-700',
-  unfulfilled: 'bg-yellow-100 text-yellow-700',
+  fulfilled: 'bg-blue-100 text-blue-700', unfulfilled: 'bg-yellow-100 text-yellow-700',
   partial: 'bg-orange-100 text-orange-700',
 };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('nl-BE', {
-    day: 'numeric', month: 'long', year: 'numeric',
-  });
+  return new Date(iso).toLocaleDateString('nl-BE', { day: 'numeric', month: 'long', year: 'numeric' });
 }
-
 function formatPrice(amount: string, currency: string) {
   return new Intl.NumberFormat('nl-BE', { style: 'currency', currency }).format(Number(amount));
 }
@@ -46,16 +41,12 @@ export default async function OrdersPage() {
   try {
     const payload = decodeJwtPayload(idToken);
     email = (payload.email as string) ?? '';
-  } catch {
-    redirect('/api/auth/login');
-  }
+  } catch { redirect('/api/auth/login'); }
 
   let orders: AdminOrder[] = [];
   try {
     const customer = await getCustomerByEmail(email);
-    if (customer) {
-      orders = await getOrdersByCustomerId(customer.id);
-    }
+    if (customer) orders = await getOrdersByCustomerId(customer.id);
   } catch (e) {
     console.error('Failed to fetch orders:', e);
   }
@@ -65,9 +56,7 @@ export default async function OrdersPage() {
       <div className="bg-white rounded-2xl p-12 text-center">
         <p className="font-heading font-bold text-xl text-arvenzo-ink mb-2">Nog geen bestellingen</p>
         <p className="text-sm text-arvenzo-muted font-sans mb-6">Je hebt nog niets besteld bij Arvenzo.</p>
-        <a href="/products"
-          className="inline-block bg-arvenzo-brown text-arvenzo-cream font-sans font-semibold text-sm px-6 py-3 rounded-full hover:bg-arvenzo-ink transition-colors"
-        >
+        <a href="/products" className="inline-block bg-arvenzo-brown text-arvenzo-cream font-sans font-semibold text-sm px-6 py-3 rounded-full hover:bg-arvenzo-ink transition-colors">
           Shop nu
         </a>
       </div>
@@ -75,9 +64,13 @@ export default async function OrdersPage() {
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3">
       {orders.map((order) => (
-        <div key={order.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <Link
+          key={order.id}
+          href={`/account/orders/${order.id}`}
+          className="block bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group"
+        >
           <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-arvenzo-cream-dark">
             <div>
               <span className="font-heading font-bold text-arvenzo-ink">{order.name}</span>
@@ -91,25 +84,19 @@ export default async function OrdersPage() {
             </div>
           </div>
 
-          <ul className="divide-y divide-arvenzo-cream-dark px-6">
-            {order.line_items.map((item, i) => (
-              <li key={i} className="flex items-center justify-between py-3 gap-4">
-                <span className="text-sm font-sans text-arvenzo-ink">
-                  {item.quantity}× {item.title}
-                </span>
-                <span className="text-sm font-sans text-arvenzo-muted shrink-0">
-                  {formatPrice(item.price, order.currency)}
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="flex justify-end px-6 py-3 border-t border-arvenzo-cream-dark">
-            <span className="text-sm font-sans font-semibold text-arvenzo-ink">
-              Totaal: {formatPrice(order.total_price, order.currency)}
-            </span>
+          <div className="flex items-center justify-between px-6 py-3.5">
+            <p className="text-sm font-sans text-arvenzo-muted">
+              {order.line_items.slice(0, 2).map((i) => i.title).join(', ')}
+              {order.line_items.length > 2 && ` +${order.line_items.length - 2} meer`}
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-sans font-semibold text-arvenzo-ink">
+                {formatPrice(order.total_price, order.currency)}
+              </span>
+              <span className="text-arvenzo-muted group-hover:text-arvenzo-brown transition-colors">→</span>
+            </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

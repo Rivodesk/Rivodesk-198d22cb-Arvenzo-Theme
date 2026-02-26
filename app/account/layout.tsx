@@ -1,12 +1,11 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { decodeJwtPayload } from '@/lib/auth';
+import { AccountNav } from './AccountNav';
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = cookies();
   const idToken = cookieStore.get('arvenzo_id_token')?.value;
-
   if (!idToken) redirect('/api/auth/login');
 
   let initials = '?';
@@ -33,26 +32,16 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
           </div>
           <div>
             <h1 className="font-heading font-black text-2xl text-arvenzo-ink">{fullName}</h1>
-            <Link href="/api/auth/logout" className="text-sm font-sans text-red-500 hover:text-red-700 transition-colors">
+            <a
+              href="/api/auth/logout"
+              className="text-sm font-sans text-red-500 hover:text-red-700 transition-colors"
+            >
               Uitloggen
-            </Link>
+            </a>
           </div>
         </div>
 
-        {/* Tab nav */}
-        <nav className="flex gap-1 mb-6 border-b border-arvenzo-cream-dark">
-          <Link href="/account"
-            className="px-4 py-2.5 text-sm font-sans font-medium text-arvenzo-ink/70 hover:text-arvenzo-brown transition-colors border-b-2 border-transparent data-[active]:border-arvenzo-brown data-[active]:text-arvenzo-brown"
-          >
-            Gegevens
-          </Link>
-          <Link href="/account/orders"
-            className="px-4 py-2.5 text-sm font-sans font-medium text-arvenzo-ink/70 hover:text-arvenzo-brown transition-colors border-b-2 border-transparent"
-          >
-            Bestellingen
-          </Link>
-        </nav>
-
+        <AccountNav />
         {children}
       </div>
     </div>

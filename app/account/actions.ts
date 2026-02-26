@@ -24,7 +24,6 @@ export async function updatePersonalInfoAction(
     await updateCustomer(customer.id, {
       first_name: formData.get('first_name') as string,
       last_name: formData.get('last_name') as string,
-      email: formData.get('email') as string,
       phone: (formData.get('phone') as string) || undefined,
     });
 

@@ -41,6 +41,17 @@ export interface AdminCustomer {
   addresses: AdminAddress[];
 }
 
+export interface OrderFulfillment {
+  id: number;
+  status: string;
+  tracking_company: string | null;
+  tracking_number: string | null;
+  tracking_url: string | null;
+  tracking_numbers: string[];
+  tracking_urls: string[];
+  created_at: string;
+}
+
 export interface AdminOrder {
   id: number;
   name: string;
@@ -49,11 +60,51 @@ export interface AdminOrder {
   fulfillment_status: string | null;
   total_price: string;
   currency: string;
-  line_items: {
-    title: string;
-    quantity: number;
-    price: string;
-  }[];
+  line_items: { title: string; quantity: number; price: string }[];
+  fulfillments: OrderFulfillment[];
+}
+
+export interface DetailedOrderLineItem {
+  id: number;
+  product_id: number | null;
+  variant_id: number | null;
+  title: string;
+  variant_title: string | null;
+  sku: string | null;
+  quantity: number;
+  price: string;
+  total_discount: string;
+  image?: string | null;
+}
+
+export interface DetailedOrder {
+  id: number;
+  name: string;
+  created_at: string;
+  financial_status: string;
+  fulfillment_status: string | null;
+  currency: string;
+  subtotal_price: string;
+  total_discounts: string;
+  total_shipping_price_set: {
+    shop_money: { amount: string; currency_code: string };
+  };
+  total_tax: string;
+  total_price: string;
+  taxes_included: boolean;
+  discount_codes: { code: string; amount: string; type: string }[];
+  line_items: DetailedOrderLineItem[];
+  shipping_address: {
+    first_name: string;
+    last_name: string;
+    address1: string;
+    address2: string | null;
+    city: string;
+    zip: string;
+    country: string;
+  } | null;
+  fulfillments: OrderFulfillment[];
+  customer: { id: number } | null;
 }
 
 /* ── Read ── */
@@ -72,11 +123,42 @@ export async function getOrdersByCustomerId(customerId: number): Promise<AdminOr
   return data.orders ?? [];
 }
 
+export async function getOrderById(
+  orderId: string,
+  customerId: number,
+): Promise<DetailedOrder | null> {
+  try {
+    const data = await adminFetch(`/orders/${orderId}.json`);
+    const order: DetailedOrder = data.order;
+    if (!order || order.customer?.id !== customerId) return null;
+    return order;
+  } catch {
+    return null;
+  }
+}
+
+export async function getProductImagesByIds(
+  productIds: number[],
+): Promise<Record<number, string>> {
+  if (!productIds.length) return {};
+  const ids = Array.from(new Set(productIds.filter(Boolean))).join(',');
+  try {
+    const data = await adminFetch(`/products.json?ids=${ids}&fields=id,images&limit=250`);
+    const result: Record<number, string> = {};
+    for (const p of data.products ?? []) {
+      if (p.images?.[0]?.src) result[p.id] = p.images[0].src;
+    }
+    return result;
+  } catch {
+    return {};
+  }
+}
+
 /* ── Write ── */
 
 export async function updateCustomer(
   customerId: number,
-  fields: { first_name?: string; last_name?: string; email?: string; phone?: string },
+  fields: { first_name?: string; last_name?: string; phone?: string },
 ): Promise<AdminCustomer> {
   const data = await adminFetch(`/customers/${customerId}.json`, 'PUT', {
     customer: fields,
@@ -111,10 +193,23 @@ export async function upsertDefaultAddress(
     );
     const newId = data.customer_address?.id;
     if (newId) {
-      await adminFetch(
-        `/customers/${customerId}/addresses/${newId}/default.json`,
-        'PUT',
-      );
+      await adminFetch(`/customers/${customerId}/addresses/${newId}/default.json`, 'PUT');
     }
   }
+}
+
+/* ── Tracking ── */
+
+export function buildTrackingUrl(
+  company: string | null,
+  number: string,
+  existingUrl: string | null,
+): string {
+  if (existingUrl) return existingUrl;
+  const c = (company ?? '').toLowerCase();
+  if (c.includes('postnl')) return `https://jouw.postnl.nl/track-and-trace/${number}`;
+  if (c.includes('bpost')) return `https://track.bpost.cloud/btr/web/#/search?itemCode=${number}&lang=nl`;
+  if (c.includes('dhl')) return `https://www.dhl.com/nl-nl/home/tracking.html?tracking-id=${number}`;
+  if (c.includes('asendia')) return `https://tracking.asendia.com/allorders/${number}`;
+  return '#';
 }
