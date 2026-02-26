@@ -1,23 +1,30 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { customerAccountQuery, CUSTOMER_ORDERS_QUERY, type Order } from '@/lib/customerAccount';
+import { decodeJwtPayload } from '@/lib/auth';
+import { getCustomerByEmail, getOrdersByCustomerId, type AdminOrder } from '@/lib/shopifyAdmin';
 
 export const metadata = { title: 'Mijn bestellingen' };
 
-const STATUS_LABEL: Record<string, string> = {
-  PAID: 'Betaald', PENDING: 'In behandeling', REFUNDED: 'Terugbetaald',
-  PARTIALLY_REFUNDED: 'Gedeeltelijk terugbetaald', VOIDED: 'Geannuleerd',
-  FULFILLED: 'Verstuurd', UNFULFILLED: 'Nog niet verstuurd',
-  PARTIALLY_FULFILLED: 'Gedeeltelijk verstuurd', IN_PROGRESS: 'In behandeling',
+const FINANCIAL_LABEL: Record<string, string> = {
+  paid: 'Betaald', pending: 'In behandeling', refunded: 'Terugbetaald',
+  partially_refunded: 'Gedeeltelijk terugbetaald', voided: 'Geannuleerd',
+  authorized: 'Geautoriseerd', partially_paid: 'Gedeeltelijk betaald',
 };
-
-const STATUS_COLOR: Record<string, string> = {
-  PAID: 'bg-green-100 text-green-700',
-  FULFILLED: 'bg-blue-100 text-blue-700',
-  UNFULFILLED: 'bg-yellow-100 text-yellow-700',
-  PENDING: 'bg-gray-100 text-gray-600',
-  REFUNDED: 'bg-red-100 text-red-600',
-  VOIDED: 'bg-red-100 text-red-600',
+const FULFILLMENT_LABEL: Record<string, string> = {
+  fulfilled: 'Verstuurd', unfulfilled: 'Nog niet verstuurd',
+  partial: 'Gedeeltelijk verstuurd', restocked: 'Teruggestuurd',
+};
+const FINANCIAL_COLOR: Record<string, string> = {
+  paid: 'bg-green-100 text-green-700',
+  pending: 'bg-yellow-100 text-yellow-700',
+  refunded: 'bg-red-100 text-red-600',
+  voided: 'bg-red-100 text-red-600',
+  authorized: 'bg-blue-100 text-blue-700',
+};
+const FULFILLMENT_COLOR: Record<string, string> = {
+  fulfilled: 'bg-blue-100 text-blue-700',
+  unfulfilled: 'bg-yellow-100 text-yellow-700',
+  partial: 'bg-orange-100 text-orange-700',
 };
 
 function formatDate(iso: string) {
@@ -32,18 +39,23 @@ function formatPrice(amount: string, currency: string) {
 
 export default async function OrdersPage() {
   const cookieStore = cookies();
-  const accessToken = cookieStore.get('arvenzo_access_token')?.value;
+  const idToken = cookieStore.get('arvenzo_id_token')?.value;
+  if (!idToken) redirect('/api/auth/login');
 
-  if (!accessToken) redirect('/api/auth/login');
-
-  let orders: Order[] = [];
-
+  let email = '';
   try {
-    const data = await customerAccountQuery<{ customer: { orders: { nodes: Order[] } } }>(
-      accessToken,
-      CUSTOMER_ORDERS_QUERY,
-    );
-    orders = data.customer.orders.nodes;
+    const payload = decodeJwtPayload(idToken);
+    email = (payload.email as string) ?? '';
+  } catch {
+    redirect('/api/auth/login');
+  }
+
+  let orders: AdminOrder[] = [];
+  try {
+    const customer = await getCustomerByEmail(email);
+    if (customer) {
+      orders = await getOrdersByCustomerId(customer.id);
+    }
   } catch (e) {
     console.error('Failed to fetch orders:', e);
   }
@@ -66,36 +78,35 @@ export default async function OrdersPage() {
     <div className="grid gap-4">
       {orders.map((order) => (
         <div key={order.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
-          {/* Order header */}
           <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-arvenzo-cream-dark">
             <div>
               <span className="font-heading font-bold text-arvenzo-ink">{order.name}</span>
-              <span className="ml-3 text-sm text-arvenzo-muted font-sans">{formatDate(order.processedAt)}</span>
+              <span className="ml-3 text-sm text-arvenzo-muted font-sans">{formatDate(order.created_at)}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge status={order.financialStatus} />
-              <Badge status={order.fulfillmentStatus} />
+              <Badge status={order.financial_status} labels={FINANCIAL_LABEL} colors={FINANCIAL_COLOR} />
+              {order.fulfillment_status && (
+                <Badge status={order.fulfillment_status} labels={FULFILLMENT_LABEL} colors={FULFILLMENT_COLOR} />
+              )}
             </div>
           </div>
 
-          {/* Line items */}
           <ul className="divide-y divide-arvenzo-cream-dark px-6">
-            {order.lineItems.nodes.map((item, i) => (
+            {order.line_items.map((item, i) => (
               <li key={i} className="flex items-center justify-between py-3 gap-4">
                 <span className="text-sm font-sans text-arvenzo-ink">
                   {item.quantity}× {item.title}
                 </span>
                 <span className="text-sm font-sans text-arvenzo-muted shrink-0">
-                  {formatPrice(item.price.amount, item.price.currencyCode)}
+                  {formatPrice(item.price, order.currency)}
                 </span>
               </li>
             ))}
           </ul>
 
-          {/* Total */}
           <div className="flex justify-end px-6 py-3 border-t border-arvenzo-cream-dark">
             <span className="text-sm font-sans font-semibold text-arvenzo-ink">
-              Totaal: {formatPrice(order.totalPrice.amount, order.totalPrice.currencyCode)}
+              Totaal: {formatPrice(order.total_price, order.currency)}
             </span>
           </div>
         </div>
@@ -104,12 +115,14 @@ export default async function OrdersPage() {
   );
 }
 
-function Badge({ status }: { status: string }) {
-  const label = STATUS_LABEL[status] ?? status;
-  const color = STATUS_COLOR[status] ?? 'bg-gray-100 text-gray-600';
+function Badge({ status, labels, colors }: {
+  status: string;
+  labels: Record<string, string>;
+  colors: Record<string, string>;
+}) {
   return (
-    <span className={`text-[11px] font-sans font-semibold px-2.5 py-1 rounded-full ${color}`}>
-      {label}
+    <span className={`text-[11px] font-sans font-semibold px-2.5 py-1 rounded-full ${colors[status] ?? 'bg-gray-100 text-gray-600'}`}>
+      {labels[status] ?? status}
     </span>
   );
 }
