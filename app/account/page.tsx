@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { decodeJwtPayload } from '@/lib/auth';
-import { getCustomerByEmail } from '@/lib/shopifyAdmin';
+import { decodeJwtPayload, getCustomerIdFromToken } from '@/lib/auth';
+import { getCustomerById, getCustomerByEmail } from '@/lib/shopifyAdmin';
 import { PersonalInfoForm, AddressForm } from './CustomerForm';
 
 export const metadata = { title: 'Mijn gegevens' };
@@ -19,7 +19,11 @@ export default async function AccountPage() {
     redirect('/api/auth/login');
   }
 
-  const customer = await getCustomerByEmail(email).catch(() => null);
+  // Prefer direct ID lookup from JWT sub claim; fall back to email search
+  const customerId = getCustomerIdFromToken(idToken);
+  const customer = customerId
+    ? await getCustomerById(customerId)
+    : await getCustomerByEmail(email).catch(() => null);
 
   if (!customer) {
     return (

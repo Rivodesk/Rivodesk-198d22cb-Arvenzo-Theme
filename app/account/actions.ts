@@ -2,14 +2,28 @@
 
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
-import { decodeJwtPayload } from '@/lib/auth';
-import { getCustomerByEmail, updateCustomer, upsertDefaultAddress } from '@/lib/shopifyAdmin';
+import { getCustomerIdFromToken, decodeJwtPayload } from '@/lib/auth';
+import { getCustomerById, getCustomerByEmail, updateCustomer, upsertDefaultAddress } from '@/lib/shopifyAdmin';
 
-async function getEmailFromCookie(): Promise<string> {
+async function getCustomerIdFromCookie(): Promise<number> {
   const idToken = cookies().get('arvenzo_id_token')?.value;
   if (!idToken) throw new Error('Niet ingelogd');
+
+  // Prefer direct ID from JWT sub claim
+  const id = getCustomerIdFromToken(idToken);
+  if (id) return id;
+
+  // Fall back: look up by email
   const payload = decodeJwtPayload(idToken);
-  return (payload.email as string) ?? '';
+  const email = (payload.email as string) ?? '';
+  const customer = await getCustomerByEmail(email);
+  if (!customer) throw new Error('Klant niet gevonden');
+  return customer.id;
+}
+
+async function getCustomerDefaultAddressId(customerId: number): Promise<number | undefined> {
+  const customer = await getCustomerById(customerId);
+  return customer?.default_address?.id;
 }
 
 export async function updatePersonalInfoAction(
@@ -17,11 +31,9 @@ export async function updatePersonalInfoAction(
   formData: FormData,
 ): Promise<{ error: string | null; success: boolean }> {
   try {
-    const email = await getEmailFromCookie();
-    const customer = await getCustomerByEmail(email);
-    if (!customer) return { error: 'Klant niet gevonden', success: false };
+    const customerId = await getCustomerIdFromCookie();
 
-    await updateCustomer(customer.id, {
+    await updateCustomer(customerId, {
       first_name: formData.get('first_name') as string,
       last_name: formData.get('last_name') as string,
       phone: (formData.get('phone') as string) || undefined,
@@ -40,12 +52,11 @@ export async function updateAddressAction(
   formData: FormData,
 ): Promise<{ error: string | null; success: boolean }> {
   try {
-    const email = await getEmailFromCookie();
-    const customer = await getCustomerByEmail(email);
-    if (!customer) return { error: 'Klant niet gevonden', success: false };
+    const customerId = await getCustomerIdFromCookie();
+    const existingAddressId = await getCustomerDefaultAddressId(customerId);
 
     await upsertDefaultAddress(
-      customer.id,
+      customerId,
       {
         first_name: formData.get('first_name') as string,
         last_name: formData.get('last_name') as string,
@@ -55,7 +66,7 @@ export async function updateAddressAction(
         zip: formData.get('zip') as string,
         country_code: formData.get('country_code') as string,
       },
-      customer.default_address?.id,
+      existingAddressId,
     );
 
     revalidatePath('/account');

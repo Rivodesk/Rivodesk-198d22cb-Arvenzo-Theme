@@ -109,6 +109,17 @@ export interface DetailedOrder {
 
 /* ── Read ── */
 
+export async function getCustomerById(customerId: number): Promise<AdminCustomer | null> {
+  try {
+    const data = await adminFetch(
+      `/customers/${customerId}.json`,
+    );
+    return data.customer ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getCustomerByEmail(email: string): Promise<AdminCustomer | null> {
   const data = await adminFetch(
     `/customers/search.json?query=email:${encodeURIComponent(email)}&limit=1&fields=id,first_name,last_name,email,phone,default_address,addresses`,

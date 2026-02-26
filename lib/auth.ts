@@ -26,3 +26,19 @@ export function decodeJwtPayload(token: string): Record<string, unknown> {
   const padded = payload + '='.repeat((4 - (payload.length % 4)) % 4);
   return JSON.parse(atob(padded));
 }
+
+/**
+ * Extracts the numeric Shopify customer ID from the JWT `sub` claim.
+ * Shopify Customer Accounts tokens use `sub: "gid://shopify/Customer/12345"`.
+ */
+export function getCustomerIdFromToken(token: string): number | null {
+  try {
+    const payload = decodeJwtPayload(token);
+    const sub = payload.sub as string | undefined;
+    if (!sub) return null;
+    const match = sub.match(/Customer\/(\d+)$/);
+    return match ? parseInt(match[1], 10) : null;
+  } catch {
+    return null;
+  }
+}
