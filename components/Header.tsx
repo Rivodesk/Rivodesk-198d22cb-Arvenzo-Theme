@@ -76,7 +76,7 @@ export default function Header() {
 
           <div className="flex items-center gap-1">
             <a
-              href="https://shopify.com/5304a7ff-a0eb-495b-8cc5-b88c0ac90c6d/account"
+              href="https://shopify.com/authentication/97185431895/oauth/authorize"
               aria-label="Mijn account"
               className={clsx('p-2.5 transition-colors', textColor,
                 effectivelyScrolled ? 'hover:text-arvenzo-brown' : 'hover:text-arvenzo-orange'

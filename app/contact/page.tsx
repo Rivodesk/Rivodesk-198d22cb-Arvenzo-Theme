@@ -60,13 +60,9 @@ export default function ContactPage() {
                   className="text-sm font-sans text-arvenzo-muted hover:text-arvenzo-brown transition-colors">
                   Instagram
                 </a>
-                <a href="https://facebook.com/arvenzo" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com/profile.php?id=61586099254919" target="_blank" rel="noopener noreferrer"
                   className="text-sm font-sans text-arvenzo-muted hover:text-arvenzo-brown transition-colors">
                   Facebook
-                </a>
-                <a href="https://tiktok.com/@arvenzo" target="_blank" rel="noopener noreferrer"
-                  className="text-sm font-sans text-arvenzo-muted hover:text-arvenzo-brown transition-colors">
-                  TikTok
                 </a>
               </div>
             </div>

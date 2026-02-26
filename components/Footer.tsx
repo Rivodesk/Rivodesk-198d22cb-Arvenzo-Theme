@@ -151,7 +151,7 @@ const PAYMENT_ICONS = [
 
 const SOCIALS = [
   { label: 'Instagram', href: 'https://instagram.com/arvenzo_eu' },
-  { label: 'Facebook', href: 'https://facebook.com/arvenzo' },
+  { label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61586099254919' },
 ];
 
 export default function Footer() {
