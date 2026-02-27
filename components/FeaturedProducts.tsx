@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import ProductCard from './ProductCard';
 import type { Product } from '@/lib/types';
+import { getLocale } from '@/lib/locale';
+import { t } from '@/lib/translations';
 
 export default function FeaturedProducts({ products }: { products: Product[] }) {
+  const locale = getLocale();
+
   // Pick the 4 "flagship" products — one hoodie per collection (first 4)
   const featured = products
     .filter(p => p.productType === 'Hoodies')
@@ -14,14 +18,14 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
         <div className="flex items-end justify-between mb-10">
           <div>
             <p className="text-arvenzo-orange text-[11px] font-sans font-medium uppercase tracking-[0.2em] mb-2">
-              Bestsellers
+              {t('products.badge', locale)}
             </p>
             <h2 className="font-heading font-black text-3xl sm:text-4xl text-arvenzo-ink">
-              Meest geliefd
+              {t('products.title', locale)}
             </h2>
           </div>
           <Link href="/products?type=Hoodies" className="text-sm font-sans text-arvenzo-muted hover:text-arvenzo-brown transition-colors">
-            Alle hoodies →
+            {t('products.cta', locale)}
           </Link>
         </div>
 

@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getLocale } from '@/lib/locale';
+import { t } from '@/lib/translations';
 
 export default function Hero() {
+  const locale = getLocale();
+
   return (
     <section className="relative h-screen min-h-[700px] max-h-[1000px] flex items-end overflow-hidden bg-arvenzo-dark">
       {/* Background */}
@@ -22,16 +26,16 @@ export default function Hero() {
         {/* Tag */}
         <div className="inline-flex items-center gap-2 bg-arvenzo-orange/20 border border-arvenzo-orange/40 text-arvenzo-orange text-[11px] font-sans font-medium tracking-widest uppercase px-4 py-2 rounded-full mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-arvenzo-orange animate-pulse" />
-          Nieuw — Crescent Peak & Lunar Horizon
+          {t('hero.badge', locale)}
         </div>
 
         <h1 className="font-heading font-black text-[clamp(3.5rem,10vw,8rem)] text-arvenzo-cream leading-[0.92] tracking-tight">
-          Draag het<br />
-          <em className="not-italic text-arvenzo-orange">avontuur.</em>
+          {t('hero.title.main', locale)}<br />
+          <em className="not-italic text-arvenzo-orange">{t('hero.title.accent', locale)}</em>
         </h1>
 
         <p className="mt-6 text-arvenzo-cream/60 font-sans text-lg sm:text-xl max-w-md leading-relaxed">
-          Premium streetwear voor wie de bergen voelt. Limited edition, gedrukt in Europa.
+          {t('hero.subtitle', locale)}
         </p>
 
         <div className="flex flex-wrap gap-3 mt-10">
@@ -39,13 +43,13 @@ export default function Hero() {
             href="/products"
             className="inline-flex items-center gap-2 bg-arvenzo-cream text-arvenzo-ink font-heading font-bold px-8 py-4 rounded-full text-[15px] tracking-wide hover:bg-arvenzo-orange hover:text-arvenzo-cream transition-all active:scale-[0.97]"
           >
-            Shop de collectie
+            {t('hero.cta', locale)}
           </Link>
           <Link
             href="/products/crescent-peak-hoodie"
             className="inline-flex items-center gap-2 border border-arvenzo-cream/25 text-arvenzo-cream font-sans font-medium px-8 py-4 rounded-full text-[15px] hover:border-arvenzo-cream/60 transition-all"
           >
-            Bestseller →
+            {t('hero.bestseller', locale)}
           </Link>
         </div>
       </div>

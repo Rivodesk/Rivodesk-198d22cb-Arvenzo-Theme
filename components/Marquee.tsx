@@ -1,10 +1,12 @@
-const ITEMS = [
-  'AVONTUUR', 'KWALITEIT', 'LIMITED EDITION', 'GEDRUKT IN DUITSLAND',
-  'BELGISCH MERK', 'VRIJE GEEST', 'NATUUR', 'COMFORT', 'GRATIS LEVERING V.A. €50',
-];
+import { getLocale } from '@/lib/locale';
+import { t } from '@/lib/translations';
 
 export default function Marquee() {
-  const repeated = [...ITEMS, ...ITEMS, ...ITEMS, ...ITEMS];
+  const locale = getLocale();
+
+  const keys = ['marquee.1', 'marquee.2', 'marquee.3', 'marquee.4', 'marquee.5', 'marquee.6', 'marquee.7', 'marquee.8', 'marquee.9'];
+  const items = keys.map(k => t(k, locale));
+  const repeated = [...items, ...items, ...items, ...items];
 
   return (
     <div className="relative overflow-hidden bg-arvenzo-brown py-4 select-none">

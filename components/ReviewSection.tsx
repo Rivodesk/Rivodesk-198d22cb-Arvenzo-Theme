@@ -1,4 +1,6 @@
 import type { JudgeMeAggregated, JudgeMeReview } from '@/lib/types';
+import { getLocale } from '@/lib/locale';
+import { t } from '@/lib/translations';
 
 // ─── Star helpers ─────────────────────────────────────────────────────────────
 
@@ -25,8 +27,8 @@ function StarRow({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'xs' }
 
 // ─── Review card (used in full variant) ──────────────────────────────────────
 
-function ReviewCard({ review }: { review: JudgeMeReview }) {
-  const date = new Date(review.created_at).toLocaleDateString('nl-BE', {
+function ReviewCard({ review, verifiedLabel, locale }: { review: JudgeMeReview; verifiedLabel: string; locale: string }) {
+  const date = new Date(review.created_at).toLocaleDateString(locale === 'nl' ? 'nl-BE' : locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -43,7 +45,7 @@ function ReviewCard({ review }: { review: JudgeMeReview }) {
         </div>
         {review.verified_buyer && (
           <span className="shrink-0 text-[10px] font-sans font-medium px-2 py-0.5 rounded-full bg-arvenzo-brown/10 text-arvenzo-brown border border-arvenzo-brown/20">
-            Geverifieerde koper
+            {verifiedLabel}
           </span>
         )}
       </div>
@@ -70,6 +72,7 @@ interface ReviewSectionProps {
 }
 
 export default function ReviewSection({ data, variant }: ReviewSectionProps) {
+  const locale = getLocale();
   const { averageRating, totalCount, reviews } = data;
 
   // ── Inline variant: replaces the hardcoded stars block ───────────────────
@@ -78,7 +81,7 @@ export default function ReviewSection({ data, variant }: ReviewSectionProps) {
       return (
         <div className="flex items-center gap-2 mt-3 mb-7">
           <StarRow rating={0} />
-          <span className="text-xs text-arvenzo-muted font-sans">Nog geen reviews</span>
+          <span className="text-xs text-arvenzo-muted font-sans">{t('reviews.no_reviews', locale)}</span>
         </div>
       );
     }
@@ -96,10 +99,12 @@ export default function ReviewSection({ data, variant }: ReviewSectionProps) {
   // ── Full variant: review cards section ───────────────────────────────────
   if (reviews.length === 0) return null;
 
+  const verifiedLabel = t('reviews.verified', locale);
+
   return (
     <div className="mt-10">
       <div className="flex items-center gap-3 mb-5">
-        <h3 className="font-heading font-bold text-lg text-arvenzo-ink">Klantreviews</h3>
+        <h3 className="font-heading font-bold text-lg text-arvenzo-ink">{t('reviews.customer', locale)}</h3>
         <div className="flex items-center gap-1.5">
           <StarRow rating={averageRating} size="xs" />
           <span className="text-xs text-arvenzo-muted font-sans">
@@ -110,7 +115,7 @@ export default function ReviewSection({ data, variant }: ReviewSectionProps) {
 
       <div className="space-y-4">
         {reviews.map(review => (
-          <ReviewCard key={review.id} review={review} />
+          <ReviewCard key={review.id} review={review} verifiedLabel={verifiedLabel} locale={locale} />
         ))}
       </div>
     </div>

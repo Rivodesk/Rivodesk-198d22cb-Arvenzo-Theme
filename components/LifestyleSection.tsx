@@ -2,8 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { formatPrice } from '@/lib/shopify';
+import { getLocale } from '@/lib/locale';
+import { t } from '@/lib/translations';
 
 export default function LifestyleSection({ products }: { products: Product[] }) {
+  const locale = getLocale();
+
   const hoodie = products.find(p => p.productType === 'Hoodies');
   const sweatshirt = products.find(p => p.productType === 'Sweatshirts');
   const shirt = products.find(p => p.productType === 'Unisex-Shirts');
@@ -25,17 +29,17 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-arvenzo-dark/75 via-arvenzo-dark/10 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-8">
-            <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-1">Comfortabel overal</p>
+            <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-1">{t('lifestyle.1.tag', locale)}</p>
             <h3 className="font-heading font-black text-3xl text-arvenzo-cream leading-tight mb-3">
-              Van camping<br />
-              <em className="not-italic text-arvenzo-orange">tot stad.</em>
+              {t('lifestyle.1.heading1', locale)}<br />
+              <em className="not-italic text-arvenzo-orange">{t('lifestyle.1.heading2', locale)}</em>
             </h3>
             {sweatshirt && (
               <Link
                 href={`/products/${sweatshirt.handle}`}
                 className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 text-arvenzo-cream font-sans font-medium px-5 py-2.5 rounded-full text-sm hover:bg-white/25 transition-all"
               >
-                Ontdek — {formatPrice(sweatshirt.price)} →
+                {t('lifestyle.1.cta', locale)} — {formatPrice(sweatshirt.price)} →
               </Link>
             )}
           </div>
@@ -44,16 +48,16 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
         {/* Sustainability card */}
         <div className="aspect-square bg-arvenzo-dark flex flex-col items-center justify-center p-10 text-center">
           <div className="text-5xl mb-6">🌱</div>
-          <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-3">Onze missie</p>
+          <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-3">{t('lifestyle.mission.tag', locale)}</p>
           <h3 className="font-heading font-black text-4xl text-arvenzo-cream leading-tight mb-5">
-            1 boom &<br />1 kg CO₂
+            {t('lifestyle.mission.heading', locale)}
           </h3>
           <p className="font-sans text-arvenzo-cream/70 text-base leading-relaxed max-w-xs">
-            Voor elk besteld item planten wij één boom én halen we 1 kg CO₂ uit de lucht — voor een groenere toekomst.
+            {t('lifestyle.mission.body', locale)}
           </p>
           <div className="mt-8 flex items-center gap-2 text-arvenzo-cream/40 text-xs font-sans uppercase tracking-widest">
             <span>🌍</span>
-            <span>Samen voor een groenere wereld</span>
+            <span>{t('lifestyle.mission.footer', locale)}</span>
           </div>
         </div>
       </div>
@@ -71,16 +75,16 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-arvenzo-dark/75 via-arvenzo-dark/10 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-8">
-            <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-1">Bestseller</p>
+            <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-1">{t('lifestyle.3.tag', locale)}</p>
             <h3 className="font-heading font-black text-3xl text-arvenzo-cream leading-tight mb-3">
-              De perfecte hoodie
+              {t('lifestyle.3.heading', locale)}
             </h3>
             {hoodie && (
               <Link
                 href={`/products/${hoodie.handle}`}
                 className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 text-arvenzo-cream font-sans font-medium px-5 py-2.5 rounded-full text-sm hover:bg-white/25 transition-all"
               >
-                Ontdek — {formatPrice(hoodie.price)} →
+                {t('lifestyle.3.cta', locale)} — {formatPrice(hoodie.price)} →
               </Link>
             )}
           </div>
@@ -97,16 +101,16 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-arvenzo-dark/75 via-arvenzo-dark/10 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-8">
-            <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-1">Cadeau tip</p>
+            <p className="text-arvenzo-orange text-[11px] uppercase tracking-widest font-sans mb-1">{t('lifestyle.4.tag', locale)}</p>
             <h3 className="font-heading font-black text-3xl text-arvenzo-cream leading-tight mb-3">
-              Begin elke dag goed
+              {t('lifestyle.4.heading', locale)}
             </h3>
             {mug && (
               <Link
                 href={`/products/${mug.handle}`}
                 className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 text-arvenzo-cream font-sans font-medium px-5 py-2.5 rounded-full text-sm hover:bg-white/25 transition-all"
               >
-                Ontdek — {formatPrice(mug.price)} →
+                {t('lifestyle.4.cta', locale)} — {formatPrice(mug.price)} →
               </Link>
             )}
           </div>
@@ -128,20 +132,20 @@ export default function LifestyleSection({ products }: { products: Product[] }) 
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full py-20">
           <div className="max-w-md">
             <p className="text-arvenzo-orange text-[11px] font-sans font-medium uppercase tracking-[0.2em] mb-4">
-              Nieuw in collectie
+              {t('lifestyle.5.tag', locale)}
             </p>
             <h2 className="font-heading font-black text-5xl text-arvenzo-ink leading-[0.95]">
-              Stijl in<br />de natuur.
+              {t('lifestyle.5.heading', locale)}
             </h2>
             <p className="mt-5 text-arvenzo-muted font-sans text-lg max-w-sm leading-relaxed">
-              Lichte premium shirts met krachtige designs. Perfect voor warme avonturen.
+              {t('lifestyle.5.body', locale)}
             </p>
             {shirt && (
               <Link
                 href={`/products/${shirt.handle}`}
                 className="inline-flex items-center gap-2 mt-8 bg-arvenzo-ink text-arvenzo-cream font-heading font-bold px-7 py-3.5 rounded-full hover:bg-arvenzo-brown transition-all text-sm tracking-wide"
               >
-                Shop shirts — {formatPrice(shirt.price)}
+                {t('lifestyle.5.cta', locale)} — {formatPrice(shirt.price)}
               </Link>
             )}
           </div>

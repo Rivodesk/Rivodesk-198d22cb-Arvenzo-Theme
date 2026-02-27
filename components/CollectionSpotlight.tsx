@@ -2,51 +2,55 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { formatPrice } from '@/lib/shopify';
+import { getLocale } from '@/lib/locale';
+import { t } from '@/lib/translations';
 
 interface Props {
   products: Product[];
 }
 
-// Show the 3 collections as editorial large tiles
-const COLLECTION_META: Record<string, { label: string; desc: string; bg: string }> = {
+// Show the collections as editorial large tiles
+const COLLECTION_META: Record<string, { label: string; descKey: string; bg: string }> = {
   'Crescent Peak': {
     label: 'Crescent Peak',
-    desc: 'Maan boven een berglandschap',
+    descKey: 'spotlight.crescent_peak.desc',
     bg: 'from-stone-900 to-stone-700',
   },
   'Lunar Horizon': {
     label: 'Lunar Horizon',
-    desc: 'De horizon onder sterrenhemel',
+    descKey: 'spotlight.lunar_horizon.desc',
     bg: 'from-slate-900 to-blue-900',
   },
   'Rustic Retreat': {
     label: 'Rustic Retreat',
-    desc: 'Terugkeer naar de natuur',
+    descKey: 'spotlight.rustic_retreat.desc',
     bg: 'from-amber-900 to-stone-800',
   },
   'Pathfinder Edition': {
     label: 'Pathfinder Edition',
-    desc: 'Voor wie zijn eigen weg gaat',
+    descKey: 'spotlight.pathfinder.desc',
     bg: 'from-green-900 to-stone-800',
   },
   'Natura Compass': {
     label: 'Natura Compass',
-    desc: 'Geleid door de natuur',
+    descKey: 'spotlight.natura_compass.desc',
     bg: 'from-emerald-900 to-teal-800',
   },
   'Starry Compass': {
     label: 'Starry Compass',
-    desc: 'Navigeer op de sterren',
+    descKey: 'spotlight.starry_compass.desc',
     bg: 'from-indigo-900 to-slate-900',
   },
   'Mountain nature': {
     label: 'Mountain Nature',
-    desc: 'De berg als thuis',
+    descKey: 'spotlight.mountain_nature.desc',
     bg: 'from-neutral-800 to-stone-700',
   },
 };
 
 export default function CollectionSpotlight({ products }: Props) {
+  const locale = getLocale();
+
   // Build collection → representative hoodie map
   const collections = Object.entries(COLLECTION_META).map(([name, meta]) => {
     const rep = products.find(
@@ -62,14 +66,14 @@ export default function CollectionSpotlight({ products }: Props) {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
           <div>
             <p className="text-arvenzo-orange text-[11px] font-sans font-medium uppercase tracking-[0.2em] mb-2">
-              Collecties
+              {t('spotlight.badge', locale)}
             </p>
             <h2 className="font-heading font-black text-4xl sm:text-5xl text-arvenzo-cream leading-tight">
-              Elke collectie<br />vertelt een verhaal
+              {t('spotlight.heading', locale)}
             </h2>
           </div>
           <Link href="/products" className="text-arvenzo-cream/50 text-sm font-sans hover:text-arvenzo-orange transition-colors whitespace-nowrap">
-            Bekijk alles →
+            {t('spotlight.cta', locale)}
           </Link>
         </div>
 
@@ -94,7 +98,7 @@ export default function CollectionSpotlight({ products }: Props) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="font-heading font-black text-xl text-arvenzo-cream">{meta.label}</div>
-                <div className="text-arvenzo-cream/60 text-xs font-sans mt-0.5">{meta.desc}</div>
+                <div className="text-arvenzo-cream/60 text-xs font-sans mt-0.5">{t(meta.descKey, locale)}</div>
                 <div className="text-arvenzo-orange text-sm font-sans font-medium mt-3">
                   {formatPrice(product!.price)} →
                 </div>

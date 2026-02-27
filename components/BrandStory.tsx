@@ -1,7 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { getLocale } from '@/lib/locale';
+import { t } from '@/lib/translations';
 
 export default function BrandStory() {
+  const locale = getLocale();
+
+  const stats = [
+    { numKey: 'brand.stat1.num', labelKey: 'brand.stat1.label', subKey: 'brand.stat1.sub' },
+    { numKey: 'brand.stat2.num', labelKey: 'brand.stat2.label', subKey: 'brand.stat2.sub' },
+    { numKey: 'brand.stat3.num', labelKey: 'brand.stat3.label', subKey: 'brand.stat3.sub' },
+    { numKey: 'brand.stat4.num', labelKey: 'brand.stat4.label', subKey: 'brand.stat4.sub' },
+  ];
+
   return (
     <section className="bg-arvenzo-cream overflow-hidden">
       {/* Top: editorial full-bleed image block */}
@@ -17,11 +28,11 @@ export default function BrandStory() {
         <div className="absolute inset-0 flex items-center px-5 sm:px-8 max-w-7xl mx-auto">
           <div className="max-w-lg">
             <p className="text-arvenzo-orange text-[11px] font-sans font-medium uppercase tracking-[0.2em] mb-4">
-              Ons verhaal
+              {t('brand.label', locale)}
             </p>
             <h2 className="font-heading font-black text-4xl sm:text-5xl lg:text-6xl text-arvenzo-cream leading-[0.95]">
-              Gemaakt voor<br />
-              <em className="not-italic text-arvenzo-orange">avonturiers.</em>
+              {t('brand.heading1', locale)}<br />
+              <em className="not-italic text-arvenzo-orange">{t('brand.heading2', locale)}</em>
             </h2>
           </div>
         </div>
@@ -31,31 +42,26 @@ export default function BrandStory() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
         <div>
           <p className="text-arvenzo-ink font-sans text-lg leading-relaxed">
-            Arvenzo is geboren uit een passie voor de natuur en moderne esthetiek. Elk ontwerp is een ode aan de rust van berglandschappen en het avontuur dat daarin schuilt.
+            {t('brand.body1', locale)}
           </p>
           <p className="text-arvenzo-muted font-sans leading-relaxed mt-4">
-            Elke collectie — van <strong className="text-arvenzo-ink font-medium">Crescent Peak</strong> tot <strong className="text-arvenzo-ink font-medium">Starry Compass</strong> — vertelt een eigen verhaal van exploratie. Onze designs combineren minimalisme met krachtige grafische verhalen, gedrukt met de hoogste kwaliteitsstandaarden.
+            {t('brand.body2', locale)}
           </p>
           <Link
             href="/products"
             className="inline-flex items-center gap-2 mt-8 font-heading font-bold text-arvenzo-brown hover:gap-4 transition-all group"
           >
-            Ontdek alle collecties
+            {t('brand.cta', locale)}
             <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {[
-            { n: '7', label: 'Unieke collecties', sub: 'Elk met eigen identiteit' },
-            { n: '28', label: 'Producten', sub: 'Hoodies, shirts, mugs & meer' },
-            { n: '100%', label: 'Gedrukt in 🌍', sub: 'Premium Europees vakmanschap' },
-            { n: '3-7d', label: 'Levering', sub: 'In België en Nederland' },
-          ].map((s) => (
-            <div key={s.label} className="bg-arvenzo-cream-dark rounded-2xl p-6">
-              <div className="font-heading font-black text-3xl text-arvenzo-brown">{s.n}</div>
-              <div className="font-heading font-semibold text-arvenzo-ink text-sm mt-1">{s.label}</div>
-              <div className="font-sans text-xs text-arvenzo-muted mt-0.5">{s.sub}</div>
+          {stats.map(({ numKey, labelKey, subKey }) => (
+            <div key={labelKey} className="bg-arvenzo-cream-dark rounded-2xl p-6">
+              <div className="font-heading font-black text-3xl text-arvenzo-brown">{t(numKey, locale)}</div>
+              <div className="font-heading font-semibold text-arvenzo-ink text-sm mt-1">{t(labelKey, locale)}</div>
+              <div className="font-sans text-xs text-arvenzo-muted mt-0.5">{t(subKey, locale)}</div>
             </div>
           ))}
         </div>
