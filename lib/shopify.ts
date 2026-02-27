@@ -86,7 +86,7 @@ export interface CartLineItem {
 
 export function buildCheckoutUrl(items: CartLineItem[]): string {
   const parts = items.map((item) => `${item.variantId}:${item.quantity}`).join(',');
-  return `${STORE_URL}/cart/${parts}`;
+  return `${STORE_URL}/cart/${parts}?return_url=https%3A%2F%2Fwww.arvenzo.be`;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
