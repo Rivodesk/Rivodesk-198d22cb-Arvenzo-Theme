@@ -6,7 +6,6 @@ import {
   getCustomerByEmail,
   getOrderById,
   getFulfillmentEvents,
-  buildTrackingUrl,
   type FulfillmentEvent,
 } from '@/lib/shopifyAdmin';
 
@@ -74,6 +73,56 @@ function carrierKey(company: string | null): string {
   return 'other';
 }
 
+/* ── Ship24 API ── */
+const SHIP24_API_KEY = process.env.SHIP24_API_KEY ?? '';
+
+const SHIP24_MILESTONE_MAP: Record<string, string> = {
+  info_received: 'confirmed',
+  pickup: 'carrier_picked_up',
+  in_transit: 'in_transit',
+  out_for_delivery: 'out_for_delivery',
+  failed_attempt: 'attempted_delivery',
+  available_for_pickup: 'ready_for_pickup',
+  delivered: 'delivered',
+  exception: 'failure',
+  pending: 'confirmed',
+};
+
+async function fetchShip24Events(trackingNumber: string): Promise<FulfillmentEvent[]> {
+  if (!SHIP24_API_KEY || !trackingNumber) return [];
+  try {
+    const res = await fetch('https://api.ship24.com/public/v1/trackers/track', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${SHIP24_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ trackingNumber }),
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const events: unknown[] = data?.data?.trackings?.[0]?.events;
+    if (!Array.isArray(events) || events.length === 0) return [];
+    return [...events]
+      .sort((a: any, b: any) =>
+        new Date(a.occurrenceDatetime).getTime() - new Date(b.occurrenceDatetime).getTime()
+      )
+      .map((ev: any, i: number) => ({
+        id: i + 1,
+        status: SHIP24_MILESTONE_MAP[ev.statusMilestone] ?? 'in_transit',
+        message: ev.status ?? null,
+        happened_at: ev.occurrenceDatetime.endsWith('Z')
+          ? ev.occurrenceDatetime
+          : `${ev.occurrenceDatetime}Z`,
+        city: ev.location || null,
+        country: null,
+      }));
+  } catch {
+    return [];
+  }
+}
+
 export default async function TrackDetailPage({
   params,
 }: {
@@ -101,11 +150,23 @@ export default async function TrackDetailPage({
   const fulfillment = order.fulfillments.find((f) => f.id === fulfillmentId);
   if (!fulfillment) notFound();
 
-  /* ── Tracking events ── */
-  const rawEvents = await getFulfillmentEvents(order.id, fulfillmentId);
+  /* ── Tracking number & URL ── */
+  const trackingNumber =
+    fulfillment.tracking_numbers?.[0] ?? fulfillment.tracking_number ?? '';
+  const trackingUrl = trackingNumber
+    ? `https://arvenzo.aftership.com/${trackingNumber}`
+    : '#';
+
+  /* ── Tracking events: Ship24 (primair) → Shopify → fallback ── */
+  const [ship24Events, rawEvents] = await Promise.all([
+    fetchShip24Events(trackingNumber),
+    getFulfillmentEvents(order.id, fulfillmentId),
+  ]);
 
   const displayEvents: FulfillmentEvent[] =
-    rawEvents.length > 0
+    ship24Events.length > 0
+      ? ship24Events
+      : rawEvents.length > 0
       ? rawEvents
       : [
           {
@@ -119,15 +180,6 @@ export default async function TrackDetailPage({
         ];
 
   const activeStep = getActiveStep(displayEvents);
-
-  /* ── Tracking URL ── */
-  const trackingNumber =
-    fulfillment.tracking_numbers?.[0] ?? fulfillment.tracking_number ?? '';
-  const trackingUrl = buildTrackingUrl(
-    fulfillment.tracking_company,
-    trackingNumber,
-    fulfillment.tracking_urls?.[0] ?? fulfillment.tracking_url ?? null,
-  );
 
   const key = carrierKey(fulfillment.tracking_company);
   const carrierColor = CARRIER_COLOR[key] ?? 'bg-gray-100 text-gray-600';
@@ -233,7 +285,7 @@ export default async function TrackDetailPage({
             rel="noopener noreferrer"
             className="shrink-0 bg-arvenzo-brown text-arvenzo-cream font-sans font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-arvenzo-ink transition-colors"
           >
-            Volg pakket bij {carrierName} →
+            Volg pakket →
           </a>
         )}
       </div>
