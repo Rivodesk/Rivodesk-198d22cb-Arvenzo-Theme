@@ -5,6 +5,7 @@ import {
   useCallback, useRef, type ReactNode,
 } from 'react';
 import type { CartItem } from '@/lib/types';
+import { trackAddToCart } from '@/lib/analytics';
 
 // ─── Shopify cart shapes ──────────────────────────────────────────────────────
 
@@ -128,6 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     if (cart) {
       syncCart(cart);
+      trackAddToCart(cart.id, { ...newItem, quantity });
     } else {
       // Optimistic fallback when API is unreachable
       setItems((prev) => {

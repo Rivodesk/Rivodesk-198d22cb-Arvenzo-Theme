@@ -11,6 +11,7 @@ import LanguagePopup from '@/components/LanguagePopup';
 import { getLocale } from '@/lib/locale';
 import { Analytics } from '@vercel/analytics/next';
 import Script from 'next/script';
+import ShopifyAnalytics from '@/components/ShopifyAnalytics';
 
 export const metadata: Metadata = {
   title: {
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <CartDrawer />
               <CookieBanner />
               <LanguagePopup />
+              <ShopifyAnalytics />
             </LanguageProvider>
           </CartProvider>
         </AuthProvider>
