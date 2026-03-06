@@ -1,5 +1,7 @@
 import { getAllProducts } from '@/lib/shopify';
 import ProductCard from '@/components/ProductCard';
+import SortSelector from '@/components/SortSelector';
+import CategoryFilter from '@/components/CategoryFilter';
 import type { Metadata } from 'next';
 import type { Product } from '@/lib/types';
 
@@ -15,7 +17,7 @@ const TYPE_LABELS: Record<string, string> = {
   Hoodies: 'Hoodies',
   Sweatshirts: 'Sweatshirts',
   'Unisex-Shirts': 'Shirts',
-  'Trinkgefäße': 'Mugs',
+  'TrinkgefÃ¤Ãe': 'Mugs',
 };
 
 const SORT_OPTIONS = [
@@ -50,13 +52,11 @@ export default async function ProductsPage({ searchParams }: Props) {
   const sorted = sortProducts(filtered, sortParam);
   const types = Array.from(new Set(allProducts.map(p => p.productType).filter(Boolean)));
 
-  function buildUrl(type: string, sort: string) {
-    const params = new URLSearchParams();
-    if (type) params.set('type', type);
-    if (sort) params.set('sort', sort);
-    const q = params.toString();
-    return `/products${q ? `?${q}` : ''}`;
-  }
+  // Build type count map
+  const typeCount: Record<string, number> = {};
+  types.forEach(type => {
+    typeCount[type] = allProducts.filter(p => p.productType === type).length;
+  });
 
   return (
     <div className="min-h-screen bg-arvenzo-light">
@@ -74,52 +74,27 @@ export default async function ProductsPage({ searchParams }: Props) {
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
         {/* Filter + sort bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+        <div className="flex flex-col gap-6 mb-10">
           {/* Category filter tabs */}
-          <div className="flex flex-wrap gap-2">
-            <a
-              href={buildUrl('', sortParam)}
-              className={`px-4 py-2 rounded-full border text-sm font-sans font-medium transition-all ${
-                !typeFilter
-                  ? 'bg-arvenzo-ink text-arvenzo-cream border-arvenzo-ink'
-                  : 'border-arvenzo-cream-dark text-arvenzo-ink hover:border-arvenzo-ink/40'
-              }`}
-            >
-              Alles ({allProducts.length})
-            </a>
-            {types.map(type => (
-              <a
-                key={type}
-                href={buildUrl(type, sortParam)}
-                className={`px-4 py-2 rounded-full border text-sm font-sans font-medium transition-all ${
-                  typeFilter === type
-                    ? 'bg-arvenzo-ink text-arvenzo-cream border-arvenzo-ink'
-                    : 'border-arvenzo-cream-dark text-arvenzo-ink hover:border-arvenzo-ink/40'
-                }`}
-              >
-                {TYPE_LABELS[type] ?? type} ({allProducts.filter(p => p.productType === type).length})
-              </a>
-            ))}
-          </div>
+          <CategoryFilter
+            types={types}
+            typeLabels={TYPE_LABELS}
+            currentType={typeFilter}
+            sortParam={sortParam}
+            totalCount={allProducts.length}
+            typeCount={typeCount}
+          />
 
           {/* Sort selector */}
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-[11px] font-sans uppercase tracking-widest text-arvenzo-muted">Sorteren</span>
-            <div className="flex gap-1 flex-wrap">
-              {SORT_OPTIONS.map(opt => (
-                <a
-                  key={opt.value}
-                  href={buildUrl(typeFilter, opt.value)}
-                  className={`px-3 py-1.5 rounded-full border text-xs font-sans font-medium transition-all ${
-                    sortParam === opt.value
-                      ? 'bg-arvenzo-brown text-arvenzo-cream border-arvenzo-brown'
-                      : 'border-arvenzo-cream-dark text-arvenzo-muted hover:border-arvenzo-brown/40 hover:text-arvenzo-ink'
-                  }`}
-                >
-                  {opt.label}
-                </a>
-              ))}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="text-[11px] font-sans uppercase tracking-widest text-arvenzo-muted sm:hidden">
+              Sortering
             </div>
+            <SortSelector
+              options={SORT_OPTIONS}
+              currentSort={sortParam}
+              typeFilter={typeFilter}
+            />
           </div>
         </div>
 
