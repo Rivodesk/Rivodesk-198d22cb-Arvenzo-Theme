@@ -32,8 +32,7 @@ function basePayload() {
   return {
     shopId: SHOP_ID,
     acceptedLanguage: 'NL' as const,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    currency: 'EUR' as any,
+    currency: 'EUR' as Parameters<typeof sendShopifyAnalytics>[0]['payload']['currency'],
     hydrogenSubchannelId: '0',
     hasUserConsent: getHasConsent(),
   };
@@ -70,7 +69,7 @@ export function trackAddToCart(
           cartId,
           products: [
             {
-              productGid: variantGid, // gebruik variantGid als fallback
+              productGid: variantGid,
               variantGid,
               name: item.title,
               brand: 'Arvenzo',
