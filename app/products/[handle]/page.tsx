@@ -11,9 +11,17 @@ import type { Product } from '@/lib/types';
 
 interface PageProps { params: { handle: string } }
 
+export const revalidate = 300;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const products = await getAllProducts();
-  return products.map(p => ({ handle: p.handle }));
+  try {
+    const products = await getAllProducts();
+    return products.map(p => ({ handle: p.handle }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -29,8 +37,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
   };
 }
-
-export const revalidate = 300;
 
 export default async function ProductPage({ params }: PageProps) {
   const [product, allProducts, reviewData] = await Promise.all([
@@ -147,9 +153,9 @@ export default async function ProductPage({ params }: PageProps) {
             {/* Trust mini-bar */}
             <div className="grid grid-cols-3 gap-3 mb-6">
               {[
-                { e: '🚚', t: 'Gratis v.a. €50' },
-                { e: '↩️', t: '14 dagen retour' },
-                { e: '🌍', t: 'Gedrukt in Europa' },
+                { e: 'ð', t: 'Gratis v.a. â¬50' },
+                { e: 'â©ï¸', t: '14 dagen retour' },
+                { e: 'ð', t: 'Gedrukt in Europa' },
               ].map(i => (
                 <div key={i.t} className="flex flex-col items-center text-center p-3 bg-arvenzo-cream rounded-xl gap-1.5">
                   <span className="text-xl">{i.e}</span>
@@ -162,7 +168,7 @@ export default async function ProductPage({ params }: PageProps) {
             <details className="group" open>
               <summary className="flex items-center justify-between cursor-pointer py-3 border-t border-arvenzo-cream-dark font-heading font-semibold text-arvenzo-ink text-sm select-none">
                 Productomschrijving
-                <span className="group-open:rotate-180 transition-transform text-arvenzo-muted">↓</span>
+                <span className="group-open:rotate-180 transition-transform text-arvenzo-muted">â</span>
               </summary>
               <div
                 className="product-description pb-4 text-sm text-arvenzo-muted font-sans leading-relaxed"
@@ -173,12 +179,12 @@ export default async function ProductPage({ params }: PageProps) {
             <details className="group">
               <summary className="flex items-center justify-between cursor-pointer py-3 border-t border-arvenzo-cream-dark font-heading font-semibold text-arvenzo-ink text-sm select-none">
                 Verzending & retouren
-                <span className="group-open:rotate-180 transition-transform text-arvenzo-muted">↓</span>
+                <span className="group-open:rotate-180 transition-transform text-arvenzo-muted">â</span>
               </summary>
               <div className="pb-4 text-sm text-arvenzo-muted font-sans leading-relaxed space-y-2">
-                <p>• Gratis standaard verzending bij bestellingen vanaf €50</p>
-                <p>• Levertijd: 3-7 werkdagen binnen België en Nederland</p>
-                <p>• Retourneren binnen 14 dagen na ontvangst</p>
+                <p>â¢ Gratis standaard verzending bij bestellingen vanaf â¬50</p>
+                <p>â¢ Levertijd: 3-7 werkdagen binnen BelgiÃ« en Nederland</p>
+                <p>â¢ Retourneren binnen 14 dagen na ontvangst</p>
               </div>
             </details>
 
